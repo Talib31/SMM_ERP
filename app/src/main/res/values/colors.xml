@@ -16,4 +16,5 @@
 
     <color name="trueColor">#1DC21E</color>
     <color name="falseColor">#E23D3A</color>
+    <color name="deactive">#979797</color>
 </resources>

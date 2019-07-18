@@ -3,6 +3,7 @@ package com.android.erp.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +48,10 @@ public class MainAdapter extends ExpandableRecyclerViewAdapter<TitleParentViewHo
         final TitleChild child = ((TitleParent) group).getItems().get(childIndex);
         holder.setViews(child.getName(),child.getDone(),child.getUndone(),avenir_book);
         holder.itemView.setOnClickListener(v -> {
+            Log.d("sdasdas","flat:" + flatPosition + "   " + "child:"+childIndex);
             Intent intent = new Intent(context, CategoriesActivity.class);
+            intent.putExtra("userId","1");
+            intent.putExtra("categoryId",String.valueOf(flatPosition));
             context.startActivity(intent);
         });
     }

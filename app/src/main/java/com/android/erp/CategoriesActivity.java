@@ -1,5 +1,7 @@
 package com.android.erp;
 
+import android.animation.ArgbEvaluator;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.view.ViewPager;
@@ -8,18 +10,31 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.erp.Adapter.AllDataAdapter;
 import com.android.erp.Models.AllDataModel;
 import com.android.erp.Models.PagerModel;
+import com.android.erp.Network.ApiService;
+import com.android.erp.Network.Response.CategoriesResponse;
+import com.android.erp.Network.Response.HomeResponse;
+import com.android.erp.Network.RetrofitClient;
 import com.android.erp.Utils.CardPagerAdapter;
 import com.android.erp.Utils.GeneralUtils;
 import com.android.erp.Utils.ShadowTransformer;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class CategoriesActivity extends AppCompatActivity {
 
@@ -33,14 +48,24 @@ public class CategoriesActivity extends AppCompatActivity {
     private List<AllDataModel> list;
     private ViewPager viewPager;
     private CardPagerAdapter mCardAdapter;
+    private ArgbEvaluator argbEvaluator = new ArgbEvaluator();
+    private ProgressBar categoriesProgress;
+
+    private String userId,categoryId;
+
+    private Disposable disposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categories);
+        Intent intent = getIntent();
+         userId = intent.getStringExtra("userId");
+         categoryId = intent.getStringExtra("categoryId");
         initData();
+        setClicks();
         initViewPager();
-        initRecycler();
+        fetchData();
     }
 
     private void initViewPager() {
@@ -57,12 +82,55 @@ public class CategoriesActivity extends AppCompatActivity {
         fragmentCardShadowTransformer.enableScaling(true);
         viewPager.setAdapter(mCardAdapter);
         viewPager.setPageTransformer(false, fragmentCardShadowTransformer);
-        viewPager.setOffscreenPageLimit(3);
+        viewPager.setOffscreenPageLimit(4);
         viewPager.setCurrentItem(1,true);
+
+    }
+
+    private void fetchData() {
+        ApiService service = new RetrofitClient().create();
+        Observable<List<CategoriesResponse>> get = null;
+
+        get = service.getPosts(userId,categoryId);
+
+        disposable = get
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnError(error -> GeneralUtils.largeLog("doOnErrorEventsFragmentCall", error.getMessage()))
+                .doOnComplete(() -> {
+            categoriesProgress.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+
+        })
+                .subscribe(this::initRecycler,
+                        Throwable::getMessage);
+
+    }
+
+    private void setClicks(){
+        lang.setOnClickListener(v -> {
+            PopupMenu p = new PopupMenu(this,lang);
+            p.getMenuInflater().inflate(R.menu.main_menu,p.getMenu());
+            p.setOnMenuItemClickListener(item -> {
+                return true;
+            });
+            p.show();
+        });
+        back.setOnClickListener(v -> finish());
+        date.setOnClickListener(v -> {
+            PopupMenu p = new PopupMenu(this,date);
+            p.getMenuInflater().inflate(R.menu.date_menu,p.getMenu());
+            p.setOnMenuItemClickListener(item -> {
+
+                return true;
+            });
+            p.show();
+        });
     }
 
     private void initData(){
         viewPager = findViewById(R.id.viewPager);
+        categoriesProgress = findViewById(R.id.categoriesProgress);
         recyclerView = findViewById(R.id.categories_recycler);
         appBarLayout = findViewById(R.id.appBarLayCategories);
         toolbar = findViewById(R.id.toolbarCategories);
@@ -83,24 +151,28 @@ public class CategoriesActivity extends AppCompatActivity {
         lang.setTypeface(avenir_light);
     }
 
-    private void initRecycler(){
+    private void initRecycler(List<CategoriesResponse> response){
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         list = new ArrayList<>();
-        list.add(new AllDataModel("21/03/2019",true));
-        list.add(new AllDataModel("22/03/2019",true));
-        list.add(new AllDataModel("23/03/2019",false));
-        list.add(new AllDataModel("24/03/2019",true));
-        list.add(new AllDataModel("25/03/2019",true));
-        list.add(new AllDataModel("26/03/2019",false));
-        list.add(new AllDataModel("27/03/2019",true));
-        list.add(new AllDataModel("28/03/2019",true));
-        list.add(new AllDataModel("29/03/2019",false));
-        list.add(new AllDataModel("30/03/2019",false));
-        list.add(new AllDataModel("31/03/2019",true));
-        list.add(new AllDataModel("01/04/2019",true));
-        list.add(new AllDataModel("02/04/2019",false));
+        for (int i =0;i<response.size();i++){
+            boolean check = false;
+            if (response.get(i).getChecking().equals("0")){
+                check =false;
+            }else {
+                check = true;
+            }
+            list.add(new AllDataModel(response.get(i).getDate(),check));
+        }
         allDataAdapter = new AllDataAdapter(this,list);
         recyclerView.setAdapter(allDataAdapter);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (disposable != null)
+            disposable.dispose();
+    }
+
 }

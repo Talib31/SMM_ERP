@@ -1,5 +1,6 @@
 package com.android.erp.Utils;
 
+import android.animation.ArgbEvaluator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -25,6 +26,7 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
     private List<PagerModel> mData;
     private float mBaseElevation;
     Context context;
+    private View view;
 
     public CardPagerAdapter() {
         mData = new ArrayList<>();
@@ -64,7 +66,7 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        View view = LayoutInflater.from(container.getContext())
+         view = LayoutInflater.from(container.getContext())
                 .inflate(R.layout.card_pager, container, false);
 
         container.addView(view);
@@ -94,7 +96,13 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
         tvBannersSlider.setTypeface(avenir_medium);
 
         Glide.with(context).load(item.getImage()).into(ivBannerSlider);
-
+    }
+    public void changeColor(int i, float v, int i1){
+        ArgbEvaluator argbEvaluator = new ArgbEvaluator();
+        TextView tvBannersSlider = view.findViewById(R.id.pager_text);
+        CardView cardView = (CardView) view.findViewById(R.id.cardView);
+        cardView.setCardBackgroundColor((Integer)argbEvaluator.evaluate(v,context.getResources().getColor(R.color.white),context.getResources().getColor(R.color.textColor2)));
+        tvBannersSlider.setTextColor(context.getResources().getColor(R.color.deactive));
     }
 
 }

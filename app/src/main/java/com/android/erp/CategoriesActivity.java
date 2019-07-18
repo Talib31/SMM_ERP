@@ -69,11 +69,18 @@ public class CategoriesActivity extends AppCompatActivity {
     }
 
     private void initViewPager() {
+        ArrayList<String> list = new ArrayList<>();
+        ArrayList<String> lists = new ArrayList<>();
+        list = (ArrayList<String>)getIntent().getSerializableExtra("myList");
+        lists = (ArrayList<String>)getIntent().getSerializableExtra("myLists");
         List<PagerModel> pagerModels = new ArrayList<>();
-        pagerModels.add(new PagerModel("Twitter","https://images.vexels.com/media/users/3/137419/isolated/preview/b1a3fab214230557053ed1c4bf17b46c-twitter-icon-logo-by-vexels.png"));
-        pagerModels.add(new PagerModel("Instagram","http://pluspng.com/img-png/instagram-png-instagram-png-logo-1455.png"));
-        pagerModels.add(new PagerModel("Facebook","https://images.vexels.com/media/users/3/137253/isolated/preview/90dd9f12fdd1eefb8c8976903944c026-facebook-icon-logo-by-vexels.png"));
-        pagerModels.add(new PagerModel("Linkedin","https://images.vexels.com/media/users/3/137382/isolated/preview/c59b2807ea44f0d70f41ca73c61d281d-linkedin-icon-logo-by-vexels.png"));
+        for (int i = 0;i<list.size();i++){
+            pagerModels.add(new PagerModel(list.get(i),lists.get(i)));
+        }
+//        pagerModels.add(new PagerModel("Twitter","https://images.vexels.com/media/users/3/137419/isolated/preview/b1a3fab214230557053ed1c4bf17b46c-twitter-icon-logo-by-vexels.png"));
+//        pagerModels.add(new PagerModel("Instagram","http://pluspng.com/img-png/instagram-png-instagram-png-logo-1455.png"));
+//        pagerModels.add(new PagerModel("Facebook","https://images.vexels.com/media/users/3/137253/isolated/preview/90dd9f12fdd1eefb8c8976903944c026-facebook-icon-logo-by-vexels.png"));
+//        pagerModels.add(new PagerModel("Linkedin","https://images.vexels.com/media/users/3/137382/isolated/preview/c59b2807ea44f0d70f41ca73c61d281d-linkedin-icon-logo-by-vexels.png"));
         mCardAdapter = new CardPagerAdapter();
         for (PagerModel mservice :pagerModels){
             mCardAdapter.addCardItem(mservice,getApplicationContext(), GeneralUtils.convertDpToPixel(2));
@@ -83,7 +90,7 @@ public class CategoriesActivity extends AppCompatActivity {
         viewPager.setAdapter(mCardAdapter);
         viewPager.setPageTransformer(false, fragmentCardShadowTransformer);
         viewPager.setOffscreenPageLimit(4);
-        viewPager.setCurrentItem(1,true);
+        viewPager.setCurrentItem(4,true);
 
     }
 

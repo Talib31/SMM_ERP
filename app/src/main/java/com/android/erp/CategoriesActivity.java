@@ -85,6 +85,7 @@ public class CategoriesActivity extends AppCompatActivity {
         viewPager.setOffscreenPageLimit(4);
         viewPager.setCurrentItem(1,true);
 
+
     }
 
     private void fetchData() {

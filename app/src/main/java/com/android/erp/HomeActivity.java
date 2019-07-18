@@ -147,6 +147,7 @@ public class HomeActivity extends AppCompatActivity {
     private void setClicks(){
         lang.setOnClickListener(v -> {
             PopupMenu p = new PopupMenu(HomeActivity.this,lang);
+
             p.getMenuInflater().inflate(R.menu.main_menu,p.getMenu());
             p.setOnMenuItemClickListener(item -> {
                 Toast.makeText(getApplicationContext(),"s",Toast.LENGTH_SHORT).show();

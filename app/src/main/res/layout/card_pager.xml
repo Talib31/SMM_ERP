@@ -9,7 +9,7 @@
     android:scaleY=".88 "
     app:cardElevation="0dp"
     app:cardCornerRadius="8dp"
-    app:cardBackgroundColor="@color/textColor2"
+    app:cardBackgroundColor="@color/white"
     android:layout_height="match_parent"
     android:layout_gravity="center">
 
@@ -32,7 +32,7 @@
 
     <TextView
         android:id="@+id/pager_text"
-        android:textColor="@color/white"
+        android:textColor="@color/deactive"
         android:textSize="16sp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/pager_image"

@@ -121,6 +121,7 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
         tvBannersSlider.setTypeface(avenir_medium);
         change(1);
         Glide.with(context).load(item.getImage()).into(ivBannerSlider);
+        change(1);
     }
     public void changeColor(int i, float v, int i1){
         ArgbEvaluator argbEvaluator = new ArgbEvaluator();
@@ -129,5 +130,25 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
         cardView.setCardBackgroundColor((Integer)argbEvaluator.evaluate(v,context.getResources().getColor(R.color.white),context.getResources().getColor(R.color.textColor2)));
         tvBannersSlider.setTextColor(context.getResources().getColor(R.color.deactive));
     }
+    public void change(int position){
+        for (int i=0;i<getCount();i++){
+            CardView currentCard=mViews.get(i);
+
+            if (currentCard!=null) {
+                TextView textView=currentCard.findViewById(R.id.pager_text);
+                if (i == position) {
+                    currentCard.setCardBackgroundColor(context.getResources().getColor(R.color.textColor2));
+                    textView.setTextColor(context.getResources().getColor(R.color.white));
+
+                }
+                else {
+                    currentCard.setCardBackgroundColor(context.getResources().getColor(R.color.white));
+                    textView.setTextColor(context.getResources().getColor(R.color.deactive));
+                }
+            }
+
+        }
+    }
+
 
 }

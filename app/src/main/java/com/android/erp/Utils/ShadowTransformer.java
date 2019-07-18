@@ -105,7 +105,7 @@ public class ShadowTransformer implements ViewPager.OnPageChangeListener, ViewPa
 
     @Override
     public void onPageSelected(int position) {
-
+        ((CardPagerAdapter)mAdapter).change(position);
     }
 
     @Override

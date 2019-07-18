@@ -71,9 +71,9 @@ public class MainAdapter extends ExpandableRecyclerViewAdapter<TitleParentViewHo
                 ArrayList<String> pagerModels = new ArrayList<>();
                 ArrayList<String> pagerModelss = new ArrayList<>();
                 pagerModels.add("Photo");
-                pagerModelss.add("https://www.sccpre.cat/mypng/full/15-155680_camera-icon-white-small-white-camera-icon-transparent.png");
+                pagerModelss.add("https://cdn.pixabay.com/photo/2015/12/22/04/00/photo-1103595_960_720.png");
                 pagerModels.add("Video");
-                pagerModelss.add("http://www.sclance.com/pngs/video-play-button-transparent-png/video_play_button_transparent_png_1463609.png");
+                pagerModelss.add("https://i.ya-webdesign.com/images/play-button-overlay-png-12.png");
                 Intent intent = new Intent(context, CategoriesActivity.class);
                 intent.putExtra("myList",pagerModels);
                 intent.putExtra("myLists",pagerModelss);
@@ -84,7 +84,7 @@ public class MainAdapter extends ExpandableRecyclerViewAdapter<TitleParentViewHo
                 ArrayList<String> pagerModels = new ArrayList<>();
                 ArrayList<String> pagerModelss = new ArrayList<>();
                 pagerModels.add("SMS");
-                pagerModelss.add("https://vires.com/wp-content/uploads/2016/11/Mail-Icon-white.png");
+                pagerModelss.add("https://image.flaticon.com/icons/png/512/156/156931.png");
                 Intent intent = new Intent(context, CategoriesActivity.class);
                 intent.putExtra("myList",pagerModels);
                 intent.putExtra("myLists",pagerModelss);

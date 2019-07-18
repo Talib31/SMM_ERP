@@ -88,9 +88,9 @@ public class CategoriesActivity extends AppCompatActivity {
         ShadowTransformer fragmentCardShadowTransformer = new ShadowTransformer(viewPager, mCardAdapter,this);
         fragmentCardShadowTransformer.enableScaling(true);
         viewPager.setAdapter(mCardAdapter);
-        viewPager.setPageTransformer(false, fragmentCardShadowTransformer);
+        viewPager.setPageTransformer(true, fragmentCardShadowTransformer);
         viewPager.setOffscreenPageLimit(4);
-        viewPager.setCurrentItem(4,true);
+        viewPager.setCurrentItem(1,true);
 
     }
 

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.erp.Models.AllDataModel;
+import com.android.erp.Network.Response.CategoriesResponse;
 import com.android.erp.PostDetailsActivity;
 import com.android.erp.R;
 
@@ -19,9 +20,9 @@ import java.util.List;
 public class AllDataAdapter extends RecyclerView.Adapter<AllDataAdapter.AllDataViewHolder> {
 
     private Context context;
-    private List<AllDataModel> list;
+    private List<CategoriesResponse> list;
 
-    public AllDataAdapter(Context context, List<AllDataModel> list) {
+    public AllDataAdapter(Context context, List<CategoriesResponse> list) {
         this.context = context;
         this.list = list;
     }
@@ -39,22 +40,25 @@ public class AllDataAdapter extends RecyclerView.Adapter<AllDataAdapter.AllDataV
         allDataViewHolder.date.setText(list.get(i).getDate());
         allDataViewHolder.date.setTypeface(avenir_light);
         allDataViewHolder.done.setTypeface(avenir_light);
-        if (list.get(i).isDone()){
-            allDataViewHolder.done.setText(R.string.done);
-            allDataViewHolder.done.setTextColor(context.getResources().getColor(R.color.trueColor));
-        }else {
+        if (list.get(i).getChecking().equals("0")){
             allDataViewHolder.done.setText(R.string.undone);
             allDataViewHolder.done.setTextColor(context.getResources().getColor(R.color.falseColor));
+        }else {
+            allDataViewHolder.done.setText(R.string.done);
+            allDataViewHolder.done.setTextColor(context.getResources().getColor(R.color.trueColor));
         }
         allDataViewHolder.itemView.setOnClickListener(v -> {
             String name = null;
-            if (list.get(i).isDone()){
-                name = "done";
-            }else {
+            if (list.get(i).getChecking().equals("0")){
                 name = "undone";
+            }else {
+                name = "done";
             }
             Intent intent = new Intent(context, PostDetailsActivity.class);
             intent.putExtra("date",list.get(i).getDate());
+            intent.putExtra("title",list.get(i).getTitle());
+            intent.putExtra("text",list.get(i).getText());
+            intent.putExtra("price",list.get(i).getAdvertisementPrice());
             intent.putExtra("isdone",name);
             context.startActivity(intent);
         });

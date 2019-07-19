@@ -24,6 +24,7 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
 
     private List<CardView> mViews;
     private List<PagerModel> mData;
+    private TextView tvBannersSlider;
     private float mBaseElevation;
     Context context;
     private View view;
@@ -54,6 +55,28 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
         return null;
     }
 
+
+    public void change(int position){
+        for (int i=0;i<getCount();i++){
+            CardView currentCard=mViews.get(i);
+
+            if (currentCard!=null) {
+                TextView textView=currentCard.findViewById(R.id.pager_text);
+                if (i == position) {
+                    currentCard.setCardBackgroundColor(context.getResources().getColor(R.color.textColor2));
+                    textView.setTextColor(context.getResources().getColor(R.color.white));
+
+                }
+                else {
+                    currentCard.setCardBackgroundColor(context.getResources().getColor(R.color.white));
+                    textView.setTextColor(context.getResources().getColor(R.color.textColor));
+                }
+            }
+
+        }
+    }
+
+
     @Override
     public int getCount() {
         return mData.size();
@@ -69,8 +92,10 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
          view = LayoutInflater.from(container.getContext())
                 .inflate(R.layout.card_pager, container, false);
 
+
         container.addView(view);
         bind(mData.get(position), view);
+
         CardView cardView = (CardView) view.findViewById(R.id.cardView);
 
         if (mBaseElevation == 0) {
@@ -91,10 +116,10 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
     private void bind(final PagerModel item, View view) {
         Typeface avenir_medium = Typeface.createFromAsset(context.getAssets(),"fonts/AvenirMedium.ttf");
         ImageView ivBannerSlider =  view.findViewById(R.id.pager_image);
-        TextView tvBannersSlider = view.findViewById(R.id.pager_text);
+        tvBannersSlider = view.findViewById(R.id.pager_text);
         tvBannersSlider.setText(item.getName());
         tvBannersSlider.setTypeface(avenir_medium);
-
+        change(1);
         Glide.with(context).load(item.getImage()).into(ivBannerSlider);
     }
     public void changeColor(int i, float v, int i1){

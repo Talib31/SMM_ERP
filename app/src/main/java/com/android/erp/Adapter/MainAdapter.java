@@ -54,7 +54,7 @@ public class MainAdapter extends ExpandableRecyclerViewAdapter<TitleParentViewHo
         Typeface avenir_book = Typeface.createFromAsset(context.getAssets(),"fonts/AvenirBook.ttf");
         final TitleChild child = ((TitleParent) group).getItems().get(childIndex);
         holder.setViews(child.getName(),child.getDone(),child.getUndone(),avenir_book);
-        Log.d("dasdas",flatPosition + "" + childIndex);
+        Log.d("dasdas",flatPosition + " " + childIndex);
         holder.itemView.setOnClickListener(v -> {
             if (flatPosition ==1 || flatPosition == 2 || flatPosition == 3 || flatPosition ==4){
                 ArrayList<String> pagerModels = new ArrayList<>();

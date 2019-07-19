@@ -45,7 +45,7 @@ public class CategoriesActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private AllDataAdapter allDataAdapter;
-    private List<AllDataModel> list;
+    private List<CategoriesResponse> list;
     private ViewPager viewPager;
     private CardPagerAdapter mCardAdapter;
     private ArgbEvaluator argbEvaluator = new ArgbEvaluator();
@@ -162,15 +162,16 @@ public class CategoriesActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         list = new ArrayList<>();
-        for (int i =0;i<response.size();i++){
-            boolean check = false;
-            if (response.get(i).getChecking().equals("0")){
-                check =false;
-            }else {
-                check = true;
-            }
-            list.add(new AllDataModel(response.get(i).getDate(),check));
-        }
+        list = response;
+//        for (int i =0;i<response.size();i++){
+//            boolean check = false;
+//            if (response.get(i).getChecking().equals("0")){
+//                check =false;
+//            }else {
+//                check = true;
+//            }
+//            list.add(new AllDataModel(response.get(i).getDate(),check));
+//        }
         allDataAdapter = new AllDataAdapter(this,list);
         recyclerView.setAdapter(allDataAdapter);
     }

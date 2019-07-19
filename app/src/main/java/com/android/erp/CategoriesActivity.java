@@ -45,7 +45,7 @@ public class CategoriesActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private AllDataAdapter allDataAdapter;
-    private List<AllDataModel> list;
+    private List<CategoriesResponse> list;
     private ViewPager viewPager;
     private CardPagerAdapter mCardAdapter;
     private ArgbEvaluator argbEvaluator = new ArgbEvaluator();
@@ -65,7 +65,7 @@ public class CategoriesActivity extends AppCompatActivity {
         initData();
         setClicks();
         initViewPager();
-        fetchData();
+        fetchData(categoryId);
     }
 
     private void initViewPager() {
@@ -91,15 +91,45 @@ public class CategoriesActivity extends AppCompatActivity {
         viewPager.setPageTransformer(true, fragmentCardShadowTransformer);
         viewPager.setOffscreenPageLimit(4);
         viewPager.setCurrentItem(1,true);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
 
+            }
 
+            @Override
+            public void onPageSelected(int i) {
+                if (categoryId.equals("1") || categoryId.equals("2") || categoryId.equals("4") || categoryId.equals("3")){
+                    categoriesProgress.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.INVISIBLE);
+                    if (categoryId.equals("1")){
+                        fetchData("3");
+                    }else if (categoryId.equals("2")){
+                        fetchData("1");
+                    }
+                }else if (categoryId.equals("6") || categoryId.equals("7")){
+                    categoriesProgress.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.INVISIBLE);
+                    if (categoryId.equals("6")){
+                        fetchData("6");
+                    } else if (categoryId.equals("7")) {
+                        fetchData("7");
+                    }
+                }else if (categoryId.equals("9")){
+                   categoriesProgress.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.INVISIBLE);
+                    fetchData("9");
+                }
+            }
 
+            @Override
+            public void onPageScrollStateChanged(int i) {
 
-
-
+            }
+        });
     }
 
-    private void fetchData() {
+    private void fetchData(String categoryId) {
         ApiService service = new RetrofitClient().create();
         Observable<List<CategoriesResponse>> get = null;
 
@@ -167,15 +197,16 @@ public class CategoriesActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         list = new ArrayList<>();
-        for (int i =0;i<response.size();i++){
-            boolean check = false;
-            if (response.get(i).getChecking().equals("0")){
-                check =false;
-            }else {
-                check = true;
-            }
-            list.add(new AllDataModel(response.get(i).getDate(),check));
-        }
+        list = response;
+//        for (int i =0;i<response.size();i++){
+//            boolean check = false;
+//            if (response.get(i).getChecking().equals("0")){
+//                check =false;
+//            }else {
+//                check = true;
+//            }
+//            list.add(new AllDataModel(response.get(i).getDate(),check));
+//        }
         allDataAdapter = new AllDataAdapter(this,list);
         recyclerView.setAdapter(allDataAdapter);
     }

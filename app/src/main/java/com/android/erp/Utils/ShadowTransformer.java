@@ -3,6 +3,7 @@ package com.android.erp.Utils;
 import android.content.Context;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -85,7 +86,12 @@ public class ShadowTransformer implements ViewPager.OnPageChangeListener, ViewPa
             }
             currentCard.setCardElevation((baseElevation + baseElevation
                     * (CardAdapter.MAX_ELEVATION_FACTOR - .9f) * (0.9f - realOffset)));
+
         }
+
+
+
+
 
         CardView nextCard = mAdapter.getCardViewAt(nextPosition);
 
@@ -101,11 +107,14 @@ public class ShadowTransformer implements ViewPager.OnPageChangeListener, ViewPa
         }
 
         mLastOffset = positionOffset;
+        Log.d("positionV",String.valueOf(position));
+
+
     }
 
     @Override
     public void onPageSelected(int position) {
-
+        ((CardPagerAdapter)mAdapter).change(position);
     }
 
     @Override

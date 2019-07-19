@@ -86,6 +86,10 @@ public class CategoriesActivity extends AppCompatActivity {
         viewPager.setCurrentItem(1,true);
 
 
+
+
+
+
     }
 
     private void fetchData() {

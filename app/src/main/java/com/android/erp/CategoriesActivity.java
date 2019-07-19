@@ -65,7 +65,7 @@ public class CategoriesActivity extends AppCompatActivity {
         initData();
         setClicks();
         initViewPager();
-        fetchData();
+        fetchData(categoryId);
     }
 
     private void initViewPager() {
@@ -91,10 +91,45 @@ public class CategoriesActivity extends AppCompatActivity {
         viewPager.setPageTransformer(true, fragmentCardShadowTransformer);
         viewPager.setOffscreenPageLimit(4);
         viewPager.setCurrentItem(1,true);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
 
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                if (categoryId.equals("1") || categoryId.equals("2") || categoryId.equals("4") || categoryId.equals("3")){
+                    categoriesProgress.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.INVISIBLE);
+                    if (categoryId.equals("1")){
+                        fetchData("3");
+                    }else if (categoryId.equals("2")){
+                        fetchData("1");
+                    }
+                }else if (categoryId.equals("6") || categoryId.equals("7")){
+                    categoriesProgress.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.INVISIBLE);
+                    if (categoryId.equals("6")){
+                        fetchData("6");
+                    } else if (categoryId.equals("7")) {
+                        fetchData("7");
+                    }
+                }else if (categoryId.equals("9")){
+                   categoriesProgress.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.INVISIBLE);
+                    fetchData("9");
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
     }
 
-    private void fetchData() {
+    private void fetchData(String categoryId) {
         ApiService service = new RetrofitClient().create();
         Observable<List<CategoriesResponse>> get = null;
 

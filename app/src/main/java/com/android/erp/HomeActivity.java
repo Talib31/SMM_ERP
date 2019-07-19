@@ -1,5 +1,7 @@
 package com.android.erp;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -52,6 +54,7 @@ public class HomeActivity extends AppCompatActivity {
     private MainAdapter adapter;
     private LinearLayoutManager layoutManager;
     private ProgressBar progressBar;
+    private String userId;
 
     private Disposable disposable;
 
@@ -59,6 +62,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        userId = getIntent().getStringExtra("userId");
         initData();
         invisible();
         fetchData();
@@ -109,7 +113,7 @@ public class HomeActivity extends AppCompatActivity {
         ApiService service = new RetrofitClient().create();
         Observable<HomeResponse> get = null;
 
-        get = service.getMain("1");
+        get = service.getMain(userId);
         disposable = get
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -154,7 +158,17 @@ public class HomeActivity extends AppCompatActivity {
             });
             p.show();
         });
-        back.setOnClickListener(v -> finish());
+        back.setOnClickListener(view -> {
+            SharedPreferences.Editor editor = getSharedPreferences("USER", MODE_PRIVATE).edit();
+            editor.putString("userId", "");
+            editor.putBoolean("check",false);
+            editor.putBoolean("isAdmin",false);
+            editor.apply();
+            Intent intent = new Intent(HomeActivity.this,LoginActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            finish();
+        });
         date.setOnClickListener(v -> {
             PopupMenu p = new PopupMenu(HomeActivity.this,date);
             p.getMenuInflater().inflate(R.menu.date_menu,p.getMenu());

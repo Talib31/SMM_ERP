@@ -1,6 +1,7 @@
 package com.android.erp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.support.design.widget.AppBarLayout;
@@ -179,11 +180,23 @@ public class LoginActivity extends AppCompatActivity {
 
         }else {
             if (loginResponse.getUser().getIsAdmin().equals("0")){
+                SharedPreferences.Editor editor = getSharedPreferences("USER", MODE_PRIVATE).edit();
+                editor.putString("userId", loginResponse.getUser().getUserId());
+                editor.putBoolean("check",true);
+                editor.putBoolean("isAdmin",false);
+                editor.apply();
                 Intent intent = new Intent(getApplicationContext(),HomeActivity.class);
+                intent.putExtra("userId",loginResponse.getUser().getUserId());
                 startActivity(intent);
                 finish();
             }else {
+                SharedPreferences.Editor editor = getSharedPreferences("USER", MODE_PRIVATE).edit();
+                editor.putString("userId", loginResponse.getUser().getUserId());
+                editor.putBoolean("check",true);
+                editor.putBoolean("isAdmin",true);
+                editor.apply();
                 Intent intent = new Intent(getApplicationContext(),FirstHomeActivity.class);
+                intent.putExtra("userId",loginResponse.getUser().getUserId());
                 startActivity(intent);
                 finish();
             }

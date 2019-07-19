@@ -120,7 +120,7 @@
     <com.rengwuxian.materialedittext.MaterialEditText
         android:id="@+id/date_editText"
         android:layout_below="@id/detailRelative"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="30dp"
         android:hint="@string/tarix"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
@@ -169,6 +169,7 @@
         android:layout_height="wrap_content" />
 
     <CheckBox
+        android:id="@+id/doneBox"
         android:buttonTint="#15B83D"
         android:layout_marginStart="10dp"
         android:layout_toEndOf="@id/done_confirm"

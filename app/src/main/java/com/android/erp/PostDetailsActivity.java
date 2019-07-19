@@ -5,6 +5,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ public class PostDetailsActivity extends AppCompatActivity {
     private ImageView back;
     private TextView title,lang,all_name_details,isDoneDetails;
     private String date,isdone;
+    private CheckBox doneBox,undoneBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,8 @@ public class PostDetailsActivity extends AppCompatActivity {
 
     private void initData() {
         Typeface avenir_light = Typeface.createFromAsset(getAssets(),"fonts/AvenirLight.ttf");
+        doneBox = findViewById(R.id.doneBox);
+        undoneBox = findViewById(R.id.undone_checkbox);
         appBarLayout = findViewById(R.id.appBarLayDetails);
         all_name_details = findViewById(R.id.all_name_details);
         isDoneDetails = findViewById(R.id.isDoneDetails);
@@ -44,9 +48,11 @@ public class PostDetailsActivity extends AppCompatActivity {
         if (isdone.equals("done")){
             isDoneDetails.setText(R.string.done);
             isDoneDetails.setTextColor(getResources().getColor(R.color.trueColor));
+            doneBox.setChecked(true);
         }else {
             isDoneDetails.setText(R.string.undone);
             isDoneDetails.setTextColor(getResources().getColor(R.color.falseColor));
+            undoneBox.setChecked(true);
         }
         all_name_details.setText(date);
         all_name_details.setTypeface(avenir_light);

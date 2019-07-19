@@ -2,6 +2,7 @@ package com.android.erp.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,8 @@ import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class MainAdapter extends ExpandableRecyclerViewAdapter<TitleParentViewHolder, TitleChildViewHolder> {
 
@@ -46,9 +49,12 @@ public class MainAdapter extends ExpandableRecyclerViewAdapter<TitleParentViewHo
 
     @Override
     public void onBindChildViewHolder(TitleChildViewHolder holder, int flatPosition, ExpandableGroup group, int childIndex) {
+        SharedPreferences prefs = context.getSharedPreferences("USER", MODE_PRIVATE);
+        String     userId = prefs.getString("userId", "");
         Typeface avenir_book = Typeface.createFromAsset(context.getAssets(),"fonts/AvenirBook.ttf");
         final TitleChild child = ((TitleParent) group).getItems().get(childIndex);
         holder.setViews(child.getName(),child.getDone(),child.getUndone(),avenir_book);
+        Log.d("dasdas",flatPosition + "" + childIndex);
         holder.itemView.setOnClickListener(v -> {
             if (flatPosition ==1 || flatPosition == 2 || flatPosition == 3 || flatPosition ==4){
                 ArrayList<String> pagerModels = new ArrayList<>();
@@ -64,7 +70,7 @@ public class MainAdapter extends ExpandableRecyclerViewAdapter<TitleParentViewHo
                 Intent intent = new Intent(context, CategoriesActivity.class);
                 intent.putExtra("myList",pagerModels);
                 intent.putExtra("myLists",pagerModelss);
-                intent.putExtra("userId","1");
+                intent.putExtra("userId", userId);
                 intent.putExtra("categoryId",String.valueOf(flatPosition));
                 context.startActivity(intent);
             }else if (flatPosition == 6 || flatPosition == 7){
@@ -77,7 +83,7 @@ public class MainAdapter extends ExpandableRecyclerViewAdapter<TitleParentViewHo
                 Intent intent = new Intent(context, CategoriesActivity.class);
                 intent.putExtra("myList",pagerModels);
                 intent.putExtra("myLists",pagerModelss);
-                intent.putExtra("userId","1");
+                intent.putExtra("userId",userId);
                 intent.putExtra("categoryId",String.valueOf(flatPosition));
                 context.startActivity(intent);
             }else if (flatPosition == 9){
@@ -88,7 +94,7 @@ public class MainAdapter extends ExpandableRecyclerViewAdapter<TitleParentViewHo
                 Intent intent = new Intent(context, CategoriesActivity.class);
                 intent.putExtra("myList",pagerModels);
                 intent.putExtra("myLists",pagerModelss);
-                intent.putExtra("userId","1");
+                intent.putExtra("userId",userId);
                 intent.putExtra("categoryId",String.valueOf(flatPosition));
                 context.startActivity(intent);
             }

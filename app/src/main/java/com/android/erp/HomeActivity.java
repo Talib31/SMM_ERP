@@ -174,7 +174,7 @@ public class HomeActivity extends AppCompatActivity {
             PopupMenu p = new PopupMenu(HomeActivity.this,date);
             p.getMenuInflater().inflate(R.menu.date_menu,p.getMenu());
             p.setOnMenuItemClickListener(item -> {
-
+                date.setText(item.getTitle());
                 return true;
             });
             p.show();

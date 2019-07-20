@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -45,7 +46,7 @@ public class CategoriesActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private AllDataAdapter allDataAdapter;
-    private List<AllDataModel> list;
+    private List<CategoriesResponse> list;
     private ViewPager viewPager;
     private CardPagerAdapter mCardAdapter;
     private ArgbEvaluator argbEvaluator = new ArgbEvaluator();
@@ -65,30 +66,131 @@ public class CategoriesActivity extends AppCompatActivity {
         initData();
         setClicks();
         initViewPager();
-        fetchData();
+        fetchData(categoryId);
     }
 
     private void initViewPager() {
+        ArrayList<String> list = new ArrayList<>();
+        ArrayList<String> lists = new ArrayList<>();
+        list = (ArrayList<String>)getIntent().getSerializableExtra("myList");
+        lists = (ArrayList<String>)getIntent().getSerializableExtra("myLists");
         List<PagerModel> pagerModels = new ArrayList<>();
-        pagerModels.add(new PagerModel("Twitter","https://images.vexels.com/media/users/3/137419/isolated/preview/b1a3fab214230557053ed1c4bf17b46c-twitter-icon-logo-by-vexels.png"));
-        pagerModels.add(new PagerModel("Instagram","http://pluspng.com/img-png/instagram-png-instagram-png-logo-1455.png"));
-        pagerModels.add(new PagerModel("Facebook","https://images.vexels.com/media/users/3/137253/isolated/preview/90dd9f12fdd1eefb8c8976903944c026-facebook-icon-logo-by-vexels.png"));
-        pagerModels.add(new PagerModel("Linkedin","https://images.vexels.com/media/users/3/137382/isolated/preview/c59b2807ea44f0d70f41ca73c61d281d-linkedin-icon-logo-by-vexels.png"));
-        mCardAdapter = new CardPagerAdapter();
+        for (int i = 0;i<list.size();i++){
+            pagerModels.add(new PagerModel(list.get(i),lists.get(i)));
+        }
+//        pagerModels.add(new PagerModel("Twitter","https://images.vexels.com/media/users/3/137419/isolated/preview/b1a3fab214230557053ed1c4bf17b46c-twitter-icon-logo-by-vexels.png"));
+//        pagerModels.add(new PagerModel("Instagram","http://pluspng.com/img-png/instagram-png-instagram-png-logo-1455.png"));
+//        pagerModels.add(new PagerModel("Facebook","https://images.vexels.com/media/users/3/137253/isolated/preview/90dd9f12fdd1eefb8c8976903944c026-facebook-icon-logo-by-vexels.png"));
+//        pagerModels.add(new PagerModel("Linkedin","https://images.vexels.com/media/users/3/137382/isolated/preview/c59b2807ea44f0d70f41ca73c61d281d-linkedin-icon-logo-by-vexels.png"));
+
+        int currentItem=Integer.parseInt(categoryId);
+
+        if (currentItem<5){
+
+            if (currentItem==3)
+                currentItem=0;
+
+        }
+
+        else {
+            if (currentItem<8)
+                currentItem-=6;
+            else
+                currentItem-=9;
+        }
+        mCardAdapter = new CardPagerAdapter(currentItem);
         for (PagerModel mservice :pagerModels){
             mCardAdapter.addCardItem(mservice,getApplicationContext(), GeneralUtils.convertDpToPixel(2));
         }
         ShadowTransformer fragmentCardShadowTransformer = new ShadowTransformer(viewPager, mCardAdapter,this);
         fragmentCardShadowTransformer.enableScaling(true);
         viewPager.setAdapter(mCardAdapter);
-        viewPager.setPageTransformer(false, fragmentCardShadowTransformer);
+        viewPager.setPageTransformer(true, fragmentCardShadowTransformer);
         viewPager.setOffscreenPageLimit(4);
-        viewPager.setCurrentItem(1,true);
 
 
+
+
+        viewPager.setCurrentItem(currentItem,true);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+
+                if (categoryId.equals("1") || categoryId.equals("2") || categoryId.equals("4") || categoryId.equals("3")){
+                    categoriesProgress.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.INVISIBLE);
+
+
+                    /*if (categoryId.equals("1")){
+                        fetchData("3");
+                    }else if (categoryId.equals("2")){
+                        fetchData("1");
+                    }*/
+
+
+                    switch (i){
+
+
+                        case 0:
+                            fetchData("3");
+                            break;
+                        case 1:
+                            fetchData("1");
+                            break;
+                        case 2:
+                            fetchData("2");
+                            break;
+                        case 3:
+                            fetchData("4");
+                            break;
+                    }
+
+                }
+
+
+                else if (categoryId.equals("6") || categoryId.equals("7")){
+                    categoriesProgress.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.INVISIBLE);
+                   /* if (categoryId.equals("6")){
+                        fetchData("6");
+                    } else if (categoryId.equals("7")) {
+                        fetchData("7");
+                    }*/
+
+                    switch (i){
+
+
+                        case 0:
+                            fetchData("6");
+                            break;
+                        case 1:
+                            fetchData("7");
+                            break;
+
+                    }
+                }
+
+
+                else if (categoryId.equals("9")){
+                   categoriesProgress.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.INVISIBLE);
+                    fetchData("9");
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
     }
 
-    private void fetchData() {
+    private void fetchData(String categoryId) {
         ApiService service = new RetrofitClient().create();
         Observable<List<CategoriesResponse>> get = null;
 
@@ -122,7 +224,7 @@ public class CategoriesActivity extends AppCompatActivity {
             PopupMenu p = new PopupMenu(this,date);
             p.getMenuInflater().inflate(R.menu.date_menu,p.getMenu());
             p.setOnMenuItemClickListener(item -> {
-
+                date.setText(item.getTitle());
                 return true;
             });
             p.show();
@@ -156,15 +258,16 @@ public class CategoriesActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         list = new ArrayList<>();
-        for (int i =0;i<response.size();i++){
-            boolean check = false;
-            if (response.get(i).getChecking().equals("0")){
-                check =false;
-            }else {
-                check = true;
-            }
-            list.add(new AllDataModel(response.get(i).getDate(),check));
-        }
+        list = response;
+//        for (int i =0;i<response.size();i++){
+//            boolean check = false;
+//            if (response.get(i).getChecking().equals("0")){
+//                check =false;
+//            }else {
+//                check = true;
+//            }
+//            list.add(new AllDataModel(response.get(i).getDate(),check));
+//        }
         allDataAdapter = new AllDataAdapter(this,list);
         recyclerView.setAdapter(allDataAdapter);
     }

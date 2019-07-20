@@ -39,6 +39,10 @@
     <string name="metn">Mətn</string>
     <string name="reklam">Reklam Büdcəsi</string>
     <string name="tesdiqle">Təsdiqlə</string>
+    <string name="lorem">Lorem İpsum Dolor Sita Amet Lorem İpsum Dolor Sit Amet olor Sita Amet Lorem İpsum Dolor Sit Amet</string>
+    <string name="tesdiq">Təsdiqləmək istədiyinizdən əminsinizmi?</string>
+    <string name="l_v_et">Ləğv et</string>
+    <string name="t_sdiql">Təsdiqlə</string>
 
     <string-array name="languages">
         <item>EN</item>

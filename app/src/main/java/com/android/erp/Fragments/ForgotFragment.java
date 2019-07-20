@@ -139,17 +139,17 @@ public class ForgotFragment extends Fragment {
     }
 
     private void goToActivity(LoginResponse loginResponse) {
-       // if (loginResponse.getResult().equals("fail")){
-            //ColorStateList colorStateList = ColorStateList.valueOf(getResources().getColor(R.color.falseColor));
-            //forgot_mail.setBackgroundTintList(colorStateList);
-            //textInputLayout.setDefaultHintTextColor(colorStateList);
-            //forgotBtn.setVisibility(View.VISIBLE);
-          //  progressBar.setVisibility(View.GONE);
-        //}else {
-        InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getView().getWindowToken(),0);
-        getActivity().onBackPressed();
-        //}
+        if (loginResponse.getResult().equals("fail")){
+            ColorStateList colorStateList = ColorStateList.valueOf(getResources().getColor(R.color.falseColor));
+            forgot_mail.setBackgroundTintList(colorStateList);
+            textInputLayout.setDefaultHintTextColor(colorStateList);
+            forgotBtn.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+        }else {
+            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getView().getWindowToken(),0);
+            getActivity().onBackPressed();
+        }
     }
 
 }

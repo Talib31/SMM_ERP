@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
@@ -41,7 +42,7 @@ public class CategoriesActivity extends AppCompatActivity {
 
     private AppBarLayout appBarLayout;
     private Toolbar toolbar;
-    private ImageView back;
+    private ImageButton back;
     private TextView title,packet,lang,date,static_date;
 
     private RecyclerView recyclerView;
@@ -189,12 +190,14 @@ public class CategoriesActivity extends AppCompatActivity {
             }
         });
     }
-
+    private String capitalize(String word){
+        return word.substring(0,1).toUpperCase() + word.substring(1);
+    }
     private void fetchData(String categoryId) {
         ApiService service = new RetrofitClient().create();
         Observable<List<CategoriesResponse>> get = null;
 
-        get = service.getPosts(userId,categoryId);
+        get = service.getPosts(userId,categoryId,"9","2000");
 
         disposable = get
                 .subscribeOn(Schedulers.io())

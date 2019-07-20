@@ -15,6 +15,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -41,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private AppBarLayout appBarLayout;
     private Toolbar toolbar;
-    private ImageView back;
+    private ImageButton back;
     private TextView title,login_text,forgot_password;
     private AppCompatEditText edtMail,edtPassword;
     private TextInputLayout textInputLayout,passLayout;

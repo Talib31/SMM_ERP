@@ -55,6 +55,9 @@ public class AllDataAdapter extends RecyclerView.Adapter<AllDataAdapter.AllDataV
                 name = "done";
             }
             Intent intent = new Intent(context, PostDetailsActivity.class);
+            intent.putExtra("postId",list.get(i).getId());
+            intent.putExtra("userId",list.get(i).getUserId());
+            intent.putExtra("categoryId",list.get(i).getCategoryId());
             intent.putExtra("date",list.get(i).getDate());
             intent.putExtra("title",list.get(i).getTitle());
             intent.putExtra("text",list.get(i).getText());

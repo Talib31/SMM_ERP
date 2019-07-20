@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -46,7 +47,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private AppBarLayout appBarLayout;
     private Toolbar toolbar;
-    private ImageView back;
+    private ImageButton back;
     private TextView title,packet,lang,date,static_date;
     private View line;
 
@@ -113,7 +114,7 @@ public class HomeActivity extends AppCompatActivity {
         ApiService service = new RetrofitClient().create();
         Observable<HomeResponse> get = null;
 
-        get = service.getMain(userId);
+        get = service.getMain(userId,"9","2000");
         disposable = get
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -127,25 +128,149 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void addData(HomeResponse event) {
-        int insta1 = Integer.parseInt(event.getNumbers().getNbInstagramChecked());
-        int insta2 = Integer.parseInt(event.getNumbers().getNbInstagramPosts());
-        int fb1 = Integer.parseInt(event.getNumbers().getNbFacebookChecked());
-        int fb2 = Integer.parseInt(event.getNumbers().getNbFacebookPosts());
-        int twitter1 = Integer.parseInt(event.getNumbers().getNbTwitterChecked());
-        int twitter2 = Integer.parseInt(event.getNumbers().getNbTwitterPosts());
-        int linkedin1 = Integer.parseInt(event.getNumbers().getNbLinkedinChecked());
-        int linkedin2 = Integer.parseInt(event.getNumbers().getNbLinkedinPosts());
-        int photo1 = Integer.parseInt(event.getNumbers().getNbPhotoChecked());
-        int photo2 = Integer.parseInt(event.getNumbers().getNbPhotoPosts());
-        int video1 = Integer.parseInt(event.getNumbers().getNbVideoChecked());
-        int video2 = Integer.parseInt(event.getNumbers().getNbVideoPosts());
-        int sms1 = Integer.parseInt(event.getNumbers().getNbSMSChecked());
-        int sms2 = Integer.parseInt(event.getNumbers().getNbSMSPosts());
+        if (event.getResult().equals("fail")){
+            invisible();
+            progressBar.setVisibility(View.VISIBLE);
+            main_recycler.setVisibility(View.INVISIBLE);
+            fetchData();
+        }else {
+            int insta1 = Integer.parseInt(event.getNumbers().getNbInstagramChecked());
+            int insta2 = Integer.parseInt(event.getNumbers().getNbInstagramPosts());
+            int fb1 = Integer.parseInt(event.getNumbers().getNbFacebookChecked());
+            int fb2 = Integer.parseInt(event.getNumbers().getNbFacebookPosts());
+            int twitter1 = Integer.parseInt(event.getNumbers().getNbTwitterChecked());
+            int twitter2 = Integer.parseInt(event.getNumbers().getNbTwitterPosts());
+            int linkedin1 = Integer.parseInt(event.getNumbers().getNbLinkedinChecked());
+            int linkedin2 = Integer.parseInt(event.getNumbers().getNbLinkedinPosts());
+            int photo1 = Integer.parseInt(event.getNumbers().getNbPhotoChecked());
+            int photo2 = Integer.parseInt(event.getNumbers().getNbPhotoPosts());
+            int video1 = Integer.parseInt(event.getNumbers().getNbVideoChecked());
+            int video2 = Integer.parseInt(event.getNumbers().getNbVideoPosts());
+            int sms1 = Integer.parseInt(event.getNumbers().getNbSMSChecked());
+            int sms2 = Integer.parseInt(event.getNumbers().getNbSMSPosts());
+            String digitalName = event.getPaketContents().get(0).getName();
+            String digital_name_check = event.getPaketContents().get(0).getCheck();
+            boolean digital_check = false;
+            if (digital_name_check.equals("1")){
+                digital_check = true;
+            }else {
+                digital_check = false;
+            }
+            String photoName = event.getPaketContents().get(1).getName();
+            String photo_name_check = event.getPaketContents().get(1).getCheck();
+            boolean photo_check;
+            if (photo_name_check.equals("1")){
+                photo_check = true;
+            }else {
+                photo_check = false;
+            }
+            String smsName = event.getPaketContents().get(2).getName();
+            String sms_name_check = event.getPaketContents().get(2).getCheck();
+            boolean sms_check;
+            if (sms_name_check.equals("1")){
+                sms_check = true;
+            }else {
+                sms_check = false;
+            }
+            String animName = event.getPaketContents().get(3).getName();
+            String anim_name_check = event.getPaketContents().get(3).getCheck();
+            boolean anim_check;
+            if (anim_name_check.equals("1")){
+                anim_check = true;
+            }else {
+                anim_check = false;
+            }
+            String infName = event.getPaketContents().get(4).getName();
+            String inf_name_check = event.getPaketContents().get(4).getCheck();
+            boolean inf_check;
+            if (inf_name_check.equals("1")){
+                inf_check = true;
+            }else {
+                inf_check = false;
+            }
+            String kivName = event.getPaketContents().get(5).getName();
+            String kiv_name_check = event.getPaketContents().get(5).getCheck();
+            boolean kiv_check;
+            if (kiv_name_check.equals("1")){
+                kiv_check = true;
+            }else {
+                kiv_check = false;
+            }
 
-        adapter = new MainAdapter(makeGenres(insta1,insta2,fb1,fb2,twitter1,twitter2,linkedin1,linkedin2,photo1,photo2,
-                video1,video2,sms1,sms2),this);
-        main_recycler.setLayoutManager(layoutManager);
-        main_recycler.setAdapter(adapter);
+            adapter = new MainAdapter(makeGenres(digitalName,digital_check,photoName,photo_check,smsName,sms_check,
+                    animName,anim_check,infName,inf_check,kivName,kiv_check,
+                    insta1, insta2, fb1, fb2, twitter1, twitter2,
+                    linkedin1, linkedin2, photo1, photo2,
+                    video1, video2, sms1, sms2), this);
+            main_recycler.setLayoutManager(layoutManager);
+            main_recycler.setAdapter(adapter);
+            packet.setText(capitalize(event.getPaketName().getName()));
+        }
+    }
+
+    private String capitalize(String word){
+        return word.substring(0,1).toUpperCase() + word.substring(1);
+    }
+
+
+    private static List<TitleParent> makeGenres(String dig_n,boolean dig_b,String p_n,boolean p_b,
+                                                String s_n,boolean s_b,String a_n,boolean a_b,
+                                                String i_n,boolean i_b,String k_n,boolean k_b,
+                                                int insta1,int insta2,int fb1,int fb2,int twitter1,int twitter2,
+                                                int linkedin1,int linkedin2,int photo1,int photo2,int video1,int video2,
+                                                int sms1,int sms2) {
+        return Arrays.asList(makeDigitalMedia(dig_n,dig_b,insta1,insta2,fb1,fb2,twitter1,twitter2,linkedin1,linkedin2),
+                makePhotoVideo(p_n,p_b,photo1,photo2,video1,video2),
+                makeSMSMarketing(s_n,s_b,sms1,sms2),
+                makeAnimation(a_n,a_b),
+                makeInfluencer(i_n,i_b),
+                makeKiv(k_n,k_b));
+    }
+    public static TitleParent makeDigitalMedia(String name,boolean active,int insta1,int insta2,int fb1,int fb2,int twitter1,int twitter2,
+                                               int linkedin1,int linkedin2) {
+        return new TitleParent(name, makeDigitalChild(insta1,insta2,fb1,fb2,twitter1,twitter2,linkedin1,linkedin2), active);
+    }
+    public static List<TitleChild> makeDigitalChild(int insta1,int insta2,int fb1,int fb2,int twitter1,int twitter2,
+                                                    int linkedin1,int linkedin2) {
+        TitleChild instagram = new TitleChild("Instagram", insta1,insta2);
+        TitleChild facebook = new TitleChild("Facebook", fb1,fb2);
+        TitleChild twitter = new TitleChild("Twitter", twitter1,twitter2);
+        TitleChild linkedin = new TitleChild("Linkedin", linkedin1,linkedin2);
+
+
+        return Arrays.asList(instagram, facebook, twitter, linkedin);
+    }
+    public static TitleParent makePhotoVideo(String name,boolean active,int photo1,int photo2,int video1,int video2) {
+        return new TitleParent(name, makePhotoVideoChild(photo1,photo2,video1,video2), active);
+    }
+    public static List<TitleChild> makePhotoVideoChild(int photo1,int photo2,int video1,int video2) {
+        TitleChild photo = new TitleChild("Photo",photo1 ,photo2);
+        TitleChild video = new TitleChild("Video", video1,video2);
+
+        return Arrays.asList(photo,video);
+    }
+    public static TitleParent makeSMSMarketing(String name,boolean active,int sms1,int sms2) {
+        return new TitleParent(name, makeSMSChild(sms1,sms2), active);
+    }
+    public static List<TitleChild> makeSMSChild(int sms1,int sms2) {
+        TitleChild photo = new TitleChild("SMS", sms1,sms2);
+
+        return Arrays.asList(photo);
+    }
+    public static TitleParent makeAnimation(String name,boolean active) {
+        return new TitleParent(name, new ArrayList<>(), active);
+    }
+    public static TitleParent makeInfluencer(String name,boolean active) {
+        return new TitleParent(name, new ArrayList<>(), active);
+    }
+    public static TitleParent makeKiv(String name,boolean active) {
+        return new TitleParent(name,new ArrayList<>(), active);
+    }
+
+    public static List<TitleChild> makeEmptyChild() {
+        TitleChild photo = new TitleChild("", 10,35);
+
+        return Arrays.asList(photo);
     }
 
     private void setClicks(){
@@ -174,7 +299,7 @@ public class HomeActivity extends AppCompatActivity {
             PopupMenu p = new PopupMenu(HomeActivity.this,date);
             p.getMenuInflater().inflate(R.menu.date_menu,p.getMenu());
             p.setOnMenuItemClickListener(item -> {
-
+                date.setText(item.getTitle());
                 return true;
             });
             p.show();
@@ -196,63 +321,6 @@ public class HomeActivity extends AppCompatActivity {
         line.setVisibility(View.INVISIBLE);
         main_recycler.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
-    }
-
-    private static List<TitleParent> makeGenres(int insta1,int insta2,int fb1,int fb2,int twitter1,int twitter2,
-                                                int linkedin1,int linkedin2,int photo1,int photo2,int video1,int video2,
-                                                int sms1,int sms2) {
-        return Arrays.asList(makeDigitalMedia(insta1,insta2,fb1,fb2,twitter1,twitter2,linkedin1,linkedin2),
-                makePhotoVideo(photo1,photo2,video1,video2),
-                makeSMSMarketing(sms1,sms2),
-                makeAnimation(),
-                makeInfluencer(),
-                makeKiv());
-    }
-    public static TitleParent makeDigitalMedia(int insta1,int insta2,int fb1,int fb2,int twitter1,int twitter2,
-                                               int linkedin1,int linkedin2) {
-        return new TitleParent("DIGITAL MEDIA", makeDigitalChild(insta1,insta2,fb1,fb2,twitter1,twitter2,linkedin1,linkedin2), true);
-    }
-    public static List<TitleChild> makeDigitalChild(int insta1,int insta2,int fb1,int fb2,int twitter1,int twitter2,
-                                                    int linkedin1,int linkedin2) {
-        TitleChild instagram = new TitleChild("Instagram", insta1,insta2);
-        TitleChild facebook = new TitleChild("Facebook", fb1,fb2);
-        TitleChild twitter = new TitleChild("Twitter", twitter1,twitter2);
-        TitleChild linkedin = new TitleChild("Linkedin", linkedin1,linkedin2);
-
-
-        return Arrays.asList(instagram, facebook, twitter, linkedin);
-    }
-    public static TitleParent makePhotoVideo(int photo1,int photo2,int video1,int video2) {
-        return new TitleParent("PHOTO & VIDEO", makePhotoVideoChild(photo1,photo2,video1,video2), true);
-    }
-    public static List<TitleChild> makePhotoVideoChild(int photo1,int photo2,int video1,int video2) {
-        TitleChild photo = new TitleChild("Photo",photo1 ,photo2);
-        TitleChild video = new TitleChild("Video", video1,video2);
-
-        return Arrays.asList(photo,video);
-    }
-    public static TitleParent makeSMSMarketing(int sms1,int sms2) {
-        return new TitleParent("SMS MARKETING", makeSMSChild(sms1,sms2), true);
-    }
-    public static List<TitleChild> makeSMSChild(int sms1,int sms2) {
-        TitleChild photo = new TitleChild("SMS", sms1,sms2);
-
-        return Arrays.asList(photo);
-    }
-    public static TitleParent makeAnimation() {
-        return new TitleParent("ANIMATION", new ArrayList<>(), false);
-    }
-    public static TitleParent makeInfluencer() {
-        return new TitleParent("INFLUENCER", new ArrayList<>(), false);
-    }
-    public static TitleParent makeKiv() {
-        return new TitleParent("KIV",new ArrayList<>(), false);
-    }
-
-    public static List<TitleChild> makeEmptyChild() {
-        TitleChild photo = new TitleChild("", 10,35);
-
-        return Arrays.asList(photo);
     }
 
     @Override

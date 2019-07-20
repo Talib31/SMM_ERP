@@ -45,7 +45,7 @@ public class CategoriesActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private AllDataAdapter allDataAdapter;
-    private List<CategoriesResponse> list;
+    private List<AllDataModel> list;
     private ViewPager viewPager;
     private CardPagerAdapter mCardAdapter;
     private ArgbEvaluator argbEvaluator = new ArgbEvaluator();
@@ -69,18 +69,11 @@ public class CategoriesActivity extends AppCompatActivity {
     }
 
     private void initViewPager() {
-        ArrayList<String> list = new ArrayList<>();
-        ArrayList<String> lists = new ArrayList<>();
-        list = (ArrayList<String>)getIntent().getSerializableExtra("myList");
-        lists = (ArrayList<String>)getIntent().getSerializableExtra("myLists");
         List<PagerModel> pagerModels = new ArrayList<>();
-        for (int i = 0;i<list.size();i++){
-            pagerModels.add(new PagerModel(list.get(i),lists.get(i)));
-        }
-//        pagerModels.add(new PagerModel("Twitter","https://images.vexels.com/media/users/3/137419/isolated/preview/b1a3fab214230557053ed1c4bf17b46c-twitter-icon-logo-by-vexels.png"));
-//        pagerModels.add(new PagerModel("Instagram","http://pluspng.com/img-png/instagram-png-instagram-png-logo-1455.png"));
-//        pagerModels.add(new PagerModel("Facebook","https://images.vexels.com/media/users/3/137253/isolated/preview/90dd9f12fdd1eefb8c8976903944c026-facebook-icon-logo-by-vexels.png"));
-//        pagerModels.add(new PagerModel("Linkedin","https://images.vexels.com/media/users/3/137382/isolated/preview/c59b2807ea44f0d70f41ca73c61d281d-linkedin-icon-logo-by-vexels.png"));
+        pagerModels.add(new PagerModel("Twitter","https://images.vexels.com/media/users/3/137419/isolated/preview/b1a3fab214230557053ed1c4bf17b46c-twitter-icon-logo-by-vexels.png"));
+        pagerModels.add(new PagerModel("Instagram","http://pluspng.com/img-png/instagram-png-instagram-png-logo-1455.png"));
+        pagerModels.add(new PagerModel("Facebook","https://images.vexels.com/media/users/3/137253/isolated/preview/90dd9f12fdd1eefb8c8976903944c026-facebook-icon-logo-by-vexels.png"));
+        pagerModels.add(new PagerModel("Linkedin","https://images.vexels.com/media/users/3/137382/isolated/preview/c59b2807ea44f0d70f41ca73c61d281d-linkedin-icon-logo-by-vexels.png"));
         mCardAdapter = new CardPagerAdapter();
         for (PagerModel mservice :pagerModels){
             mCardAdapter.addCardItem(mservice,getApplicationContext(), GeneralUtils.convertDpToPixel(2));
@@ -88,13 +81,9 @@ public class CategoriesActivity extends AppCompatActivity {
         ShadowTransformer fragmentCardShadowTransformer = new ShadowTransformer(viewPager, mCardAdapter,this);
         fragmentCardShadowTransformer.enableScaling(true);
         viewPager.setAdapter(mCardAdapter);
-        viewPager.setPageTransformer(true, fragmentCardShadowTransformer);
+        viewPager.setPageTransformer(false, fragmentCardShadowTransformer);
         viewPager.setOffscreenPageLimit(4);
         viewPager.setCurrentItem(1,true);
-
-
-
-
 
 
     }
@@ -167,16 +156,15 @@ public class CategoriesActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         list = new ArrayList<>();
-        list = response;
-//        for (int i =0;i<response.size();i++){
-//            boolean check = false;
-//            if (response.get(i).getChecking().equals("0")){
-//                check =false;
-//            }else {
-//                check = true;
-//            }
-//            list.add(new AllDataModel(response.get(i).getDate(),check));
-//        }
+        for (int i =0;i<response.size();i++){
+            boolean check = false;
+            if (response.get(i).getChecking().equals("0")){
+                check =false;
+            }else {
+                check = true;
+            }
+            list.add(new AllDataModel(response.get(i).getDate(),check));
+        }
         allDataAdapter = new AllDataAdapter(this,list);
         recyclerView.setAdapter(allDataAdapter);
     }

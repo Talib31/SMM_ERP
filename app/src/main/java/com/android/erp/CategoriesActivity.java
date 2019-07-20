@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -81,7 +82,23 @@ public class CategoriesActivity extends AppCompatActivity {
 //        pagerModels.add(new PagerModel("Instagram","http://pluspng.com/img-png/instagram-png-instagram-png-logo-1455.png"));
 //        pagerModels.add(new PagerModel("Facebook","https://images.vexels.com/media/users/3/137253/isolated/preview/90dd9f12fdd1eefb8c8976903944c026-facebook-icon-logo-by-vexels.png"));
 //        pagerModels.add(new PagerModel("Linkedin","https://images.vexels.com/media/users/3/137382/isolated/preview/c59b2807ea44f0d70f41ca73c61d281d-linkedin-icon-logo-by-vexels.png"));
-        mCardAdapter = new CardPagerAdapter();
+
+        int currentItem=Integer.parseInt(categoryId);
+
+        if (currentItem<5){
+
+            if (currentItem==3)
+                currentItem=0;
+
+        }
+
+        else {
+            if (currentItem<8)
+                currentItem-=6;
+            else
+                currentItem-=9;
+        }
+        mCardAdapter = new CardPagerAdapter(currentItem);
         for (PagerModel mservice :pagerModels){
             mCardAdapter.addCardItem(mservice,getApplicationContext(), GeneralUtils.convertDpToPixel(2));
         }
@@ -90,7 +107,11 @@ public class CategoriesActivity extends AppCompatActivity {
         viewPager.setAdapter(mCardAdapter);
         viewPager.setPageTransformer(true, fragmentCardShadowTransformer);
         viewPager.setOffscreenPageLimit(4);
-        viewPager.setCurrentItem(1,true);
+
+
+
+
+        viewPager.setCurrentItem(currentItem,true);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
@@ -99,23 +120,63 @@ public class CategoriesActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int i) {
+
                 if (categoryId.equals("1") || categoryId.equals("2") || categoryId.equals("4") || categoryId.equals("3")){
                     categoriesProgress.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.INVISIBLE);
-                    if (categoryId.equals("1")){
+
+
+                    /*if (categoryId.equals("1")){
                         fetchData("3");
                     }else if (categoryId.equals("2")){
                         fetchData("1");
+                    }*/
+
+
+                    switch (i){
+
+
+                        case 0:
+                            fetchData("3");
+                            break;
+                        case 1:
+                            fetchData("1");
+                            break;
+                        case 2:
+                            fetchData("2");
+                            break;
+                        case 3:
+                            fetchData("4");
+                            break;
                     }
-                }else if (categoryId.equals("6") || categoryId.equals("7")){
+
+                }
+
+
+                else if (categoryId.equals("6") || categoryId.equals("7")){
                     categoriesProgress.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.INVISIBLE);
-                    if (categoryId.equals("6")){
+                   /* if (categoryId.equals("6")){
                         fetchData("6");
                     } else if (categoryId.equals("7")) {
                         fetchData("7");
+                    }*/
+
+                    switch (i){
+
+
+                        case 0:
+                            fetchData("6");
+                            break;
+                        case 1:
+                            fetchData("7");
+                            break;
+
                     }
-                }else if (categoryId.equals("9")){
+                }
+
+
+                else if (categoryId.equals("9")){
                    categoriesProgress.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.INVISIBLE);
                     fetchData("9");

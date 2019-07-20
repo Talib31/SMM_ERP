@@ -28,10 +28,12 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
     private float mBaseElevation;
     Context context;
     private View view;
+    private  int position;
 
-    public CardPagerAdapter() {
+    public CardPagerAdapter(int position) {
         mData = new ArrayList<>();
         mViews = new ArrayList<>();
+        this.position=position;
     }
 
 
@@ -56,25 +58,6 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
     }
 
 
-    public void change(int position){
-        for (int i=0;i<getCount();i++){
-            CardView currentCard=mViews.get(i);
-
-            if (currentCard!=null) {
-                TextView textView=currentCard.findViewById(R.id.pager_text);
-                if (i == position) {
-                    currentCard.setCardBackgroundColor(context.getResources().getColor(R.color.textColor2));
-                    textView.setTextColor(context.getResources().getColor(R.color.white));
-
-                }
-                else {
-                    currentCard.setCardBackgroundColor(context.getResources().getColor(R.color.white));
-                    textView.setTextColor(context.getResources().getColor(R.color.textColor));
-                }
-            }
-
-        }
-    }
 
 
     @Override
@@ -119,9 +102,9 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
         tvBannersSlider = view.findViewById(R.id.pager_text);
         tvBannersSlider.setText(item.getName());
         tvBannersSlider.setTypeface(avenir_medium);
-        change(1);
+        change(position);
         Glide.with(context).load(item.getImage()).into(ivBannerSlider);
-        change(1);
+        change(position);
     }
     public void changeColor(int i, float v, int i1){
         ArgbEvaluator argbEvaluator = new ArgbEvaluator();

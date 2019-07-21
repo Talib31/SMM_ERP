@@ -1,5 +1,6 @@
 package com.android.erp.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -50,7 +51,9 @@ public class MainAdapter extends ExpandableRecyclerViewAdapter<TitleParentViewHo
     @Override
     public void onBindChildViewHolder(TitleChildViewHolder holder, int flatPosition, ExpandableGroup group, int childIndex) {
         SharedPreferences prefs = context.getSharedPreferences("USER", MODE_PRIVATE);
-        String     userId = prefs.getString("userId", "");
+        //String     userId = prefs.getString("userId", "");
+        String userId=((Activity)context).getIntent().getStringExtra("userId");
+        Log.d("userIdd",userId);
         Typeface avenir_book = Typeface.createFromAsset(context.getAssets(),"fonts/AvenirBook.ttf");
         final TitleChild child = ((TitleParent) group).getItems().get(childIndex);
         holder.setViews(child.getName(),child.getDone(),child.getUndone(),avenir_book);

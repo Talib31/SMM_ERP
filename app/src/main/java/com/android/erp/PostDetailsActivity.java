@@ -2,6 +2,7 @@ package com.android.erp;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -9,11 +10,13 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +32,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class PostDetailsActivity extends AppCompatActivity {
-
+    private RelativeLayout mainContainer;
     private AppBarLayout appBarLayout;
     private Toolbar toolbar;
     private ImageButton back;
@@ -56,10 +59,30 @@ public class PostDetailsActivity extends AppCompatActivity {
         price = getIntent().getStringExtra("price");
         initData();
         setClicks();
+        SharedPreferences editor = getSharedPreferences("USER", MODE_PRIVATE);
+        boolean isAdmin=editor.getBoolean("isAdmin",false);
+        setEditable(isAdmin);//If it is admin account can change texts of EditTextx,otherwise disable them
     }
+
+    private void setEditable(boolean isAdmin) {
+        //Hide Keyboard if it is not Admin Account
+        mainContainer.setFocusable(!isAdmin);
+        mainContainer.setFocusableInTouchMode(!isAdmin);
+
+        title.setFocusable(isAdmin);
+
+        date_editText.setEnabled(isAdmin);
+        movzu_editText.setEnabled(isAdmin);
+        metn_editText.setEnabled(isAdmin);
+        reklam_editText.setEnabled(isAdmin);
+        doneBox.setEnabled(isAdmin);
+        undoneBox.setEnabled(isAdmin);
+    }
+
 
     private void initData() {
         Typeface avenir_light = Typeface.createFromAsset(getAssets(),"fonts/AvenirLight.ttf");
+        mainContainer=(RelativeLayout)findViewById(R.id.mainContainerPostDetails);
         confirm = findViewById(R.id.btnConfirm);
         doneBox = findViewById(R.id.doneBox);
         date_editText = findViewById(R.id.date_editText);
@@ -122,8 +145,10 @@ public class PostDetailsActivity extends AppCompatActivity {
         myDialog = new Dialog(PostDetailsActivity.this);
         myDialog.setContentView(R.layout.confirm_layout);
         confirm.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
+
                 ImageView question = myDialog.findViewById(R.id.question);
                 TextView lorem = myDialog.findViewById(R.id.lorem);
                 TextView mQusetion = myDialog.findViewById(R.id.main_question);

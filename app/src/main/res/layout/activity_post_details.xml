@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/mainContainerPostDetails"
     tools:context=".PostDetailsActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -131,84 +132,84 @@
 
 
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/tarix_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/tarix_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/date_editText"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:textColorHint="@color/textColor"
-            android:textColor="@color/textColor"
-            android:layout_marginBottom="16dp"
-            android:hint="@string/tarix"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/movzu_layout"
-        android:layout_below="@id/tarix_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/movzu_editText"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:textColorHint="@color/textColor"
-            android:textColor="@color/textColor"
-            android:layout_marginBottom="16dp"
-            android:hint="@string/movzu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/date_editText"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:textColorHint="@color/textColor"
+                    android:textColor="@color/textColor"
+                    android:layout_marginBottom="16dp"
+                    android:hint="@string/tarix"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
 
-    </android.support.design.widget.TextInputLayout>
+            </android.support.design.widget.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/metn_layout"
-        android:layout_below="@id/movzu_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/movzu_layout"
+                android:layout_below="@id/tarix_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/metn_editText"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:textColorHint="@color/textColor"
-            android:textColor="@color/textColor"
-            android:layout_marginBottom="16dp"
-            android:hint="@string/metn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/reklam_layout"
-        android:layout_below="@id/metn_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/reklam_editText"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:textColorHint="@color/textColor"
-            android:textColor="@color/textColor"
-            android:layout_marginBottom="16dp"
-            android:hint="@string/reklam"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/movzu_editText"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:textColorHint="@color/textColor"
+                    android:textColor="@color/textColor"
+                    android:layout_marginBottom="16dp"
+                    android:hint="@string/movzu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
 
-    </android.support.design.widget.TextInputLayout>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/metn_layout"
+                android:layout_below="@id/movzu_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/metn_editText"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:textColorHint="@color/textColor"
+                    android:textColor="@color/textColor"
+                    android:layout_marginBottom="16dp"
+                    android:hint="@string/metn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/reklam_layout"
+                android:layout_below="@id/metn_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/reklam_editText"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:textColorHint="@color/textColor"
+                    android:textColor="@color/textColor"
+                    android:layout_marginBottom="16dp"
+                    android:hint="@string/reklam"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+            </android.support.design.widget.TextInputLayout>
         </RelativeLayout>
     </ScrollView>
 

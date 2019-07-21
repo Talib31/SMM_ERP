@@ -36,7 +36,7 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientHold
     @Override
     public void onBindViewHolder(@NonNull ClientHolder clientHolder, int i) {
         Typeface avenir_book = Typeface.createFromAsset(context.getAssets(),"fonts/AvenirBook.ttf");
-        clientHolder.textView.setText(list.get(i).getUsername());
+        clientHolder.textView.setText(list.get(i).getDisplayname());
         clientHolder.textView.setTypeface(avenir_book);
         clientHolder.textView.setOnClickListener(new View.OnClickListener() {
             @Override

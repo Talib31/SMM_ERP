@@ -53,6 +53,7 @@
                     android:textSize="16sp" />
 
                 <TextView
+
                     android:id="@+id/lang_first"
                     android:textColor="#6C727C"
                     android:drawableStart="@drawable/ic_expand_more_black_24dp"

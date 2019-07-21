@@ -285,15 +285,22 @@ public class HomeActivity extends AppCompatActivity {
             p.show();
         });
         back.setOnClickListener(view -> {
+            boolean isAdmin = getSharedPreferences("USER", MODE_PRIVATE).getBoolean("isAdmin", false);
+            if (isAdmin) {
+                finish();
+            }
+            else {
+
             SharedPreferences.Editor editor = getSharedPreferences("USER", MODE_PRIVATE).edit();
             editor.putString("userId", "");
-            editor.putBoolean("check",false);
-            editor.putBoolean("isAdmin",false);
+            editor.putBoolean("check", false);
+            editor.putBoolean("isAdmin", false);
             editor.apply();
-            Intent intent = new Intent(HomeActivity.this,LoginActivity.class);
+            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
             startActivity(intent);
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             finish();
+        }
         });
         date.setOnClickListener(v -> {
             PopupMenu p = new PopupMenu(HomeActivity.this,date);

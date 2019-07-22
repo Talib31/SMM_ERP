@@ -1,9 +1,11 @@
 package com.android.erp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.design.widget.AppBarLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -47,6 +49,7 @@ public class FirstHomeActivity extends AppCompatActivity {
     private String userId;
 
     private Disposable disposable;
+    private AlertDialog exitDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,15 +122,42 @@ public class FirstHomeActivity extends AppCompatActivity {
             p.show();
         });
         back.setOnClickListener(view -> {
-            SharedPreferences.Editor editor = getSharedPreferences("USER", MODE_PRIVATE).edit();
-            editor.putString("userId", "");
-            editor.putBoolean("check",false);
-            editor.putBoolean("isAdmin",false);
-            editor.apply();
-            Intent intent = new Intent(FirstHomeActivity.this,LoginActivity.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-            finish();
+            AlertDialog.Builder exitDialogBuilder=new AlertDialog.Builder(this);
+            exitDialogBuilder.setTitle(R.string.exitDialogTitle);
+            exitDialogBuilder.setMessage(R.string.exitDialogMessage);
+            exitDialogBuilder.setIcon(R.drawable.ic_exit);
+
+
+
+            exitDialogBuilder.setNegativeButton(R.string.exitDialogNegativeBtnTxt, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    exitDialog.dismiss();
+                }
+            });
+
+            exitDialogBuilder.setPositiveButton(R.string.exitDialogPositiveBtnTxt, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+
+
+                    SharedPreferences.Editor editor = getSharedPreferences("USER", MODE_PRIVATE).edit();
+                    editor.putString("userId", "");
+                    editor.putBoolean("check",false);
+                    editor.putBoolean("isAdmin",false);
+                    editor.apply();
+                    Intent intent = new Intent(FirstHomeActivity.this,LoginActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                    finish();
+
+                }
+            });
+            exitDialog=exitDialogBuilder.create();
+            exitDialog.show();
+
+
         });
     }
     @Override

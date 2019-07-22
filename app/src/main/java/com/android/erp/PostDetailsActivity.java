@@ -156,6 +156,7 @@ public class PostDetailsActivity extends AppCompatActivity {
                 Button buttonTesdiq = myDialog.findViewById(R.id.btnTesdqi);
                 buttonLegv.setOnClickListener(v1 -> myDialog.dismiss());
                 buttonTesdiq.setOnClickListener(v12 -> fetchData());
+
                 myDialog.show();
             }
         });

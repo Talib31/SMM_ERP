@@ -51,10 +51,29 @@ public class InfoDialog extends AppCompatDialogFragment {
         changeBtn.setOnClickListener(v -> {
 
             //TODO change User Data in Database passing as a parametr userId
+
+            displayName=companyNameEditText.getEditableText().toString();
+            mail=mailEditText.getEditableText().toString();
+            phone=phoneEditText.getEditableText().toString();
+            address=addressEditText.getEditableText().toString();
+            site=siteEditText.getEditableText().toString();
+
+            saveToDatabase(userId,displayName,phone,mail,address,site);
+
+
         });
 
 
         return alert.create();
+
+    }
+
+    private void saveToDatabase(String userId, String displayName, String phone, String mail, String address, String site) {
+
+        //TODO Url=http://mealappeazi.alwaysdata.net/erpapp/adduser.php
+        // parametrs: userId,displayname,telephone,username,address,site
+
+
 
     }
 

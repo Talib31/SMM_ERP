@@ -25,11 +25,27 @@ public class ClientResponse {
     @SerializedName("isAdmin")
     @Expose
     private String isAdmin;
+    @SerializedName("adminName")
+    @Expose
+    private String adminName;
+    @SerializedName("telephone")
+    @Expose
+    private String telephone;
+    @SerializedName("place")
+    @Expose
+    private String place;
+    @SerializedName("paketName")
+    @Expose
+    private String paketName;
+    @SerializedName("site")
+    @Expose
+    private String site;
 
     public ClientResponse() {
     }
 
-    public ClientResponse(String userId, String username, String password, String token, String displayname, String paketId, String isAdmin) {
+    public ClientResponse(String userId, String username, String password, String token, String displayname, String paketId, String isAdmin,
+                          String adminName, String telephone, String place, String paketName, String site) {
         this.userId = userId;
         this.username = username;
         this.password = password;
@@ -37,7 +53,14 @@ public class ClientResponse {
         this.displayname = displayname;
         this.paketId = paketId;
         this.isAdmin = isAdmin;
+        this.adminName = adminName;
+        this.telephone = telephone;
+        this.place = place;
+        this.paketName = paketName;
+        this.site = site;
     }
+
+
 
     public String getUserId() {
         return userId;
@@ -93,5 +116,45 @@ public class ClientResponse {
 
     public void setIsAdmin(String isAdmin) {
         this.isAdmin = isAdmin;
+    }
+
+    public String getSite() {
+        return site;
+    }
+
+    public void setSite(String site) {
+        this.site = site;
+    }
+
+    public String getAdminName() {
+        return adminName;
+    }
+
+    public void setAdminName(String adminName) {
+        this.adminName = adminName;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    public String getPlace() {
+        return place;
+    }
+
+    public void setPlace(String place) {
+        this.place = place;
+    }
+
+    public String getPaketName() {
+        return paketName;
+    }
+
+    public void setPaketName(String paketName) {
+        this.paketName = paketName;
     }
 }

@@ -3,6 +3,7 @@ package com.android.erp.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -46,8 +47,21 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientHold
             @Override
             public void onClick(View v) {
                 FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
-
                 InfoDialog dialog = new InfoDialog();
+
+                Bundle args=new Bundle();
+                args.putString("displayName",list.get(i).getDisplayname());
+                args.putString("mail",list.get(i).getUsername());
+                args.putString("adminName",list.get(i).getAdminName());
+                args.putString("phone",list.get(i).getTelephone());
+                args.putString("address",list.get(i).getPlace());
+                args.putString("site",list.get(i).getSite());
+
+
+
+
+                dialog.setArguments(args);
+
                 dialog.show(manager,"example dialog");
             }
         });

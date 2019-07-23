@@ -12,7 +12,7 @@
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/edtMailInfo"
+            android:id="@+id/edtCompanyNameInfo"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:textColorHint="@color/textColor"
@@ -32,8 +32,7 @@
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/edtPasswordInfo"
-            android:inputType="textPassword"
+            android:id="@+id/edtAdminNameInfo"
             android:hint="@string/m_sul_xs"
             android:textColor="@color/textColor"
             android:layout_marginStart="10dp"

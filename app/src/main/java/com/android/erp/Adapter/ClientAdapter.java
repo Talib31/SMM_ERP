@@ -4,15 +4,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.erp.HomeActivity;
 import com.android.erp.Network.Response.ClientResponse;
 import com.android.erp.R;
+import com.android.erp.Utils.InfoDialog;
 
 import java.util.List;
 
@@ -38,6 +42,15 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientHold
         Typeface avenir_book = Typeface.createFromAsset(context.getAssets(),"fonts/AvenirBook.ttf");
         clientHolder.textView.setText(list.get(i).getDisplayname());
         clientHolder.textView.setTypeface(avenir_book);
+        clientHolder.info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
+
+                InfoDialog dialog = new InfoDialog();
+                dialog.show(manager,"example dialog");
+            }
+        });
         clientHolder.textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,10 +69,12 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientHold
     public class ClientHolder extends RecyclerView.ViewHolder{
 
         private TextView textView;
+        private ImageView info;
 
         public ClientHolder(@NonNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.client_title);
+            info = itemView.findViewById(R.id.infoB);
         }
     }
 }

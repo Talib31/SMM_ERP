@@ -31,6 +31,7 @@ import com.android.erp.Utils.GeneralUtils;
 import com.android.erp.Utils.ShadowTransformer;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -53,6 +54,10 @@ public class CategoriesActivity extends AppCompatActivity {
     private ArgbEvaluator argbEvaluator = new ArgbEvaluator();
     private ProgressBar categoriesProgress;
 
+    private String month,year,day;
+
+    private Calendar now;
+
     private String userId,categoryId;
 
     private Disposable disposable;
@@ -64,6 +69,12 @@ public class CategoriesActivity extends AppCompatActivity {
         Intent intent = getIntent();
          userId = intent.getStringExtra("userId");
          categoryId = intent.getStringExtra("categoryId");
+        now = Calendar.getInstance();
+        day = String.valueOf(now.get(Calendar.DATE));
+
+        year =  String.valueOf(now.get(Calendar.YEAR));
+
+        month = String.valueOf(now.get(Calendar.MONTH) + 1);
         initData();
         setClicks();
         initViewPager();
@@ -198,7 +209,7 @@ public class CategoriesActivity extends AppCompatActivity {
         ApiService service = new RetrofitClient().create();
         Observable<List<CategoriesResponse>> get = null;
 
-        get = service.getPosts(userId,categoryId,"9","2000");
+        get = service.getPosts(userId,categoryId,month,year);
 
         disposable = get
                 .subscribeOn(Schedulers.io())

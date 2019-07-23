@@ -15,6 +15,9 @@ public class HomeResponse {
     @SerializedName("paketName")
     @Expose
     private PaketName paketName;
+    @SerializedName("paketLanguages")
+    @Expose
+    private List<PaketLanguage> paketLanguages = null;
     @SerializedName("paketContents")
     @Expose
     private List<InfoResponse> paketContents = null;
@@ -22,10 +25,11 @@ public class HomeResponse {
     public HomeResponse() {
     }
 
-    public HomeResponse(String result, Numbers numbers, PaketName paketName, List<InfoResponse> paketContents) {
+    public HomeResponse(String result, Numbers numbers, PaketName paketName, List<PaketLanguage> paketLanguages, List<InfoResponse> paketContents) {
         this.result = result;
         this.numbers = numbers;
         this.paketName = paketName;
+        this.paketLanguages = paketLanguages;
         this.paketContents = paketContents;
     }
 
@@ -51,6 +55,14 @@ public class HomeResponse {
 
     public void setPaketName(PaketName paketName) {
         this.paketName = paketName;
+    }
+
+    public List<PaketLanguage> getPaketLanguages() {
+        return paketLanguages;
+    }
+
+    public void setPaketLanguages(List<PaketLanguage> paketLanguages) {
+        this.paketLanguages = paketLanguages;
     }
 
     public List<InfoResponse> getPaketContents() {

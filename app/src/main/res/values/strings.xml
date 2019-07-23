@@ -47,6 +47,8 @@
     <string name="exitDialogMessage">Are you sure  you want to logout?</string>
     <string name="exitDialogNegativeBtnTxt">Cancel</string>
     <string name="exitDialogPositiveBtnTxt">Yes</string>
+    <string name="congratulations">Congratulations!</string>
+    <string name="dones">You’re Done</string>
 
     <string-array name="languages">
         <item>EN</item>

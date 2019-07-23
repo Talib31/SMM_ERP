@@ -1,5 +1,6 @@
 package com.android.erp;
 
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,10 +13,16 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import java.lang.reflect.Field;
+import java.util.Calendar;
+import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.os.Bundle;
 import android.view.View;
-import android.widget.ExpandableListAdapter;
-import android.widget.ExpandableListView;
-import android.widget.FrameLayout;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,6 +54,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class HomeActivity extends AppCompatActivity {
 
+    static final int DATE_DIALOG_ID = 1;
     private AppBarLayout appBarLayout;
     private Toolbar toolbar;
     private ImageButton back;
@@ -62,6 +70,10 @@ public class HomeActivity extends AppCompatActivity {
     private Disposable disposable;
     private AlertDialog exitDialog;
 
+    private String month,year,day;
+    private int mMonth,mYear,mDay;
+    Calendar now;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +81,13 @@ public class HomeActivity extends AppCompatActivity {
         userId = getIntent().getStringExtra("userId");
         initData();
         invisible();
-        fetchData();
+        now = Calendar.getInstance();
+        day = String.valueOf(now.get(Calendar.DATE));
+
+        year =  String.valueOf(now.get(Calendar.YEAR));
+
+        month = String.valueOf(now.get(Calendar.MONTH) + 1);
+        fetchData(month,year);
         setClicks();
         RecyclerView.ItemAnimator animator = main_recycler.getItemAnimator();
         if (animator instanceof DefaultItemAnimator) {
@@ -113,11 +131,11 @@ public class HomeActivity extends AppCompatActivity {
         lang.setTypeface(avenir_light);
     }
 
-    private void fetchData() {
+    private void fetchData(String month,String year) {
         ApiService service = new RetrofitClient().create();
         Observable<HomeResponse> get = null;
 
-        get = service.getMain(userId,"9","2000");
+        get = service.getMain(userId,month,year);
         disposable = get
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -135,7 +153,7 @@ public class HomeActivity extends AppCompatActivity {
             invisible();
             progressBar.setVisibility(View.VISIBLE);
             main_recycler.setVisibility(View.INVISIBLE);
-            fetchData();
+            fetchData(month,year);
         }else {
             int insta1 = Integer.parseInt(event.getNumbers().getNbInstagramChecked());
             int insta2 = Integer.parseInt(event.getNumbers().getNbInstagramPosts());
@@ -328,15 +346,19 @@ public class HomeActivity extends AppCompatActivity {
         }
         });
         date.setOnClickListener(v -> {
-            PopupMenu p = new PopupMenu(HomeActivity.this,date);
-            p.getMenuInflater().inflate(R.menu.date_menu,p.getMenu());
-            p.setOnMenuItemClickListener(item -> {
-                date.setText(item.getTitle());
-                return true;
-            });
-            p.show();
+            showDialog(DATE_DIALOG_ID);
+            //calendarShow();
+//            PopupMenu p = new PopupMenu(HomeActivity.this,date);
+//            p.getMenuInflater().inflate(R.menu.date_menu,p.getMenu());
+//            p.setOnMenuItemClickListener(item -> {
+//                date.setText(item.getTitle());
+//                return true;
+//            });
+//            p.show();
         });
     }
+
+
 
     private void visible(){
         packet.setVisibility(View.VISIBLE);
@@ -362,4 +384,122 @@ public class HomeActivity extends AppCompatActivity {
             disposable.dispose();
     }
 
+    private DatePickerDialog createDialogWithoutDateField() {
+        DatePickerDialog dpd = new DatePickerDialog(this, null, now.get(Calendar.YEAR), (now.get(Calendar.MONTH) + 1), now.get(Calendar.DATE));
+        try {
+            java.lang.reflect.Field[] datePickerDialogFields = dpd.getClass().getDeclaredFields();
+            for (java.lang.reflect.Field datePickerDialogField : datePickerDialogFields) {
+                if (datePickerDialogField.getName().equals("mDatePicker")) {
+                    datePickerDialogField.setAccessible(true);
+                    DatePicker datePicker = (DatePicker) datePickerDialogField.get(dpd);
+                    java.lang.reflect.Field[] datePickerFields = datePickerDialogField.getType().getDeclaredFields();
+                    for (java.lang.reflect.Field datePickerField : datePickerFields) {
+                        Log.i("test", datePickerField.getName());
+                        if ("mDaySpinner".equals(datePickerField.getName())) {
+                            datePickerField.setAccessible(true);
+                            Object dayPicker = datePickerField.get(datePicker);
+                            ((View) dayPicker).setVisibility(View.GONE);
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex) {
+        }
+        return dpd;
+    }
+    private void calendarShow() {
+        final Calendar c = Calendar.getInstance();
+
+        int y = c.get(Calendar.YEAR) + 4;
+        int m = c.get(Calendar.MONTH) - 2;
+        int d = c.get(Calendar.DAY_OF_MONTH);
+        final String[] MONTH = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+
+        DatePickerDialog dp = new DatePickerDialog(HomeActivity.this,
+                (view, year, monthOfYear, dayOfMonth) -> {
+                    String erg = "";
+                    erg = String.valueOf(dayOfMonth);
+                    erg += "." + String.valueOf(monthOfYear + 1);
+                    erg += "." + year;
+                    date.setText(erg);
+
+                }, y, m, d);
+        dp.setTitle("Calender");
+        dp.setMessage("Select Your Graduation date Please?");
+
+        dp.show();
+
+
+    }
+    OnDateSetListener mDateSetListner = new OnDateSetListener() {
+
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                              int dayOfMonth) {
+
+            mYear = year;
+            mMonth = monthOfYear;
+            mDay = dayOfMonth;
+            updateDate();
+        }
+    };
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+            case DATE_DIALOG_ID:
+                /*
+                 * return new DatePickerDialog(this, mDateSetListner, mYear, mMonth,
+                 * mDay);
+                 */
+                DatePickerDialog datePickerDialog = this.customDatePicker();
+                return datePickerDialog;
+        }
+        return null;
+    }
+
+    protected void updateDate() {
+        int localMonth = (mMonth + 1);
+        String monthString = localMonth < 10 ? "0" + localMonth : Integer
+                .toString(localMonth);
+        String localYear = Integer.toString(mYear).substring(2);
+        date.setText(new StringBuilder()
+                // Month is 0 based so add 1
+                .append(monthString).append("/").append(localYear).append(" "));
+        showDialog(R.id.congDone);
+    }
+
+    private DatePickerDialog customDatePicker() {
+        DatePickerDialog dpd = new DatePickerDialog(this, mDateSetListner,
+                mYear, mMonth, mDay);
+        try {
+
+            Field[] datePickerDialogFields = dpd.getClass().getDeclaredFields();
+            for (Field datePickerDialogField : datePickerDialogFields) {
+                if (datePickerDialogField.getName().equals("mDatePicker")) {
+                    datePickerDialogField.setAccessible(true);
+                    DatePicker datePicker = (DatePicker) datePickerDialogField
+                            .get(dpd);
+                    Field datePickerFields[] = datePickerDialogField.getType()
+                            .getDeclaredFields();
+                    for (Field datePickerField : datePickerFields) {
+                        if ("mDayPicker".equals(datePickerField.getName())
+                                || "mDaySpinner".equals(datePickerField
+                                .getName())) {
+                            datePickerField.setAccessible(true);
+                            Object dayPicker = new Object();
+                            dayPicker = datePickerField.get(datePicker);
+                            ((View) dayPicker).setVisibility(View.GONE);
+                        }
+                    }
+                }
+
+            }
+        } catch (Exception ex) {
+        }
+        return dpd;
+    }
 }
+
+

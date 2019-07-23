@@ -36,7 +36,7 @@ public class PostDetailsActivity extends AppCompatActivity {
     private AppBarLayout appBarLayout;
     private Toolbar toolbar;
     private ImageButton back;
-    private TextView title,lang,all_name_details,isDoneDetails;
+    private TextView title,lang,all_name_details,isDoneDetails,doneConfirm,undDoneConfirm;
     private String date,isdone,movzu,text,price,userId,categoryId,postId;
     private CheckBox doneBox,undoneBox;
     private AppCompatEditText date_editText,movzu_editText,metn_editText,reklam_editText;
@@ -77,12 +77,27 @@ public class PostDetailsActivity extends AppCompatActivity {
         reklam_editText.setEnabled(isAdmin);
         doneBox.setEnabled(isAdmin);
         undoneBox.setEnabled(isAdmin);
+        if (isAdmin){
+            confirm.setVisibility(View.VISIBLE);
+            doneBox.setVisibility(View.VISIBLE);
+            undoneBox.setVisibility(View.VISIBLE);
+            doneConfirm.setVisibility(View.VISIBLE);
+            undDoneConfirm.setVisibility(View.VISIBLE);
+        }else {
+            confirm.setVisibility(View.INVISIBLE);
+            doneBox.setVisibility(View.INVISIBLE);
+            undoneBox.setVisibility(View.INVISIBLE);
+            doneConfirm.setVisibility(View.INVISIBLE);
+            undDoneConfirm.setVisibility(View.INVISIBLE);
+        }
     }
 
 
     private void initData() {
         Typeface avenir_light = Typeface.createFromAsset(getAssets(),"fonts/AvenirLight.ttf");
-        mainContainer=(RelativeLayout)findViewById(R.id.mainContainerPostDetails);
+        mainContainer=findViewById(R.id.mainContainerPostDetails);
+        doneConfirm = findViewById(R.id.done_confirm);
+        undDoneConfirm = findViewById(R.id.undone_confirm);
         confirm = findViewById(R.id.btnConfirm);
         doneBox = findViewById(R.id.doneBox);
         date_editText = findViewById(R.id.date_editText);
@@ -193,10 +208,17 @@ public class PostDetailsActivity extends AppCompatActivity {
     }
 
     private void goToActivity(ResultResponse event) {
-        Intent intent = new Intent(PostDetailsActivity.this,SuccesActivity.class);
-        intent.putExtra("succes",event.getResult());
-        startActivity(intent);
-        finish();
+        if (event.getResult().equals("fail")){
+            Intent intent = new Intent(PostDetailsActivity.this, SuccesActivity.class);
+            intent.putExtra("succes", "0");
+            startActivity(intent);
+            finish();
+        }else {
+            Intent intent = new Intent(PostDetailsActivity.this, SuccesActivity.class);
+            intent.putExtra("succes", "1");
+            startActivity(intent);
+            finish();
+        }
     }
     private String capitalize(String word){
         return word.substring(0,1).toUpperCase() + word.substring(1);

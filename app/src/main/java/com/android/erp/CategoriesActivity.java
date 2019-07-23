@@ -68,6 +68,7 @@ public class CategoriesActivity extends AppCompatActivity {
         setClicks();
         initViewPager();
         fetchData(categoryId);
+
     }
 
     private void initViewPager() {
@@ -206,6 +207,7 @@ public class CategoriesActivity extends AppCompatActivity {
                 .doOnComplete(() -> {
             categoriesProgress.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
+            allDataAdapter.notifyDataSetChanged();
 
         })
                 .subscribe(this::initRecycler,
@@ -256,6 +258,8 @@ public class CategoriesActivity extends AppCompatActivity {
         packet.setTypeface(avenir_black);
         lang.setTypeface(avenir_light);
     }
+
+
 
     private void initRecycler(List<CategoriesResponse> response){
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

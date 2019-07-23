@@ -8,13 +8,15 @@ import android.support.v7.app.AppCompatDialogFragment;
 import android.support.v7.widget.AppCompatEditText;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 
 import com.android.erp.R;
 
 public class InfoDialog extends AppCompatDialogFragment {
 
     private AppCompatEditText companyNameEditText,adminNameEditText,phoneEditText,mailEditText,addressEditText,siteEditText;
-    private String displayName="",adminName="",phone="",mail="",address="",site="";
+    private String displayName="",adminName="",phone="",mail="",address="",site="",userId="";
+    private Button changeBtn;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -31,6 +33,7 @@ public class InfoDialog extends AppCompatDialogFragment {
              mail = userData.getString("mail");
              address = userData.getString("address");
              site = userData.getString("site");
+             userId=userData.getString("userId");
 
         }
         initData(view);
@@ -44,11 +47,19 @@ public class InfoDialog extends AppCompatDialogFragment {
 
             }
         });
+
+        changeBtn.setOnClickListener(v -> {
+
+            //TODO change User Data in Database passing as a parametr userId
+        });
+
+
         return alert.create();
+
     }
 
     private void initData(View view) {
-
+        changeBtn=view.findViewById(R.id.changenBtn);
         companyNameEditText=view.findViewById(R.id.edtCompanyNameInfo);
         adminNameEditText=view.findViewById(R.id.edtAdminNameInfo);
         phoneEditText=view.findViewById(R.id.edtMailInfoTel);

@@ -56,6 +56,7 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientHold
                 args.putString("phone",list.get(i).getTelephone());
                 args.putString("address",list.get(i).getPlace());
                 args.putString("site",list.get(i).getSite());
+                args.putString("userId",list.get(i).getUserId());
 
 
 

@@ -39,8 +39,9 @@ public interface ApiService {
                                                   @Field("year") String year);
 
 
-    @GET("allusers.php/")
-    Observable<List<ClientResponse>> getClients();
+    @FormUrlEncoded
+    @POST("allusers.php/")
+    Observable<List<ClientResponse>> getClients(@Field("adminId") String adminId);
 
     @FormUrlEncoded
     @POST("addpost.php/")
@@ -51,4 +52,13 @@ public interface ApiService {
                                    @Field("price") String price,
                                    @Field("date") String date,
                                    @Field("checking") String checking);
+
+    @FormUrlEncoded
+    @POST("adduser.php/")
+    Observable<ResultResponse> addUser(@Field("userId") String userId,
+                                   @Field("displayname") String displayName,
+                                   @Field("telephone") String telephone,
+                                   @Field("username") String username,
+                                   @Field("address") String address,
+                                   @Field("site") String site);
 }

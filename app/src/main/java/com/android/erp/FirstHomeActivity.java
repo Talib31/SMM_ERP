@@ -59,15 +59,15 @@ public class FirstHomeActivity extends AppCompatActivity {
         userId = intent.getStringExtra("userId");
         initData();
         invisible();
-        fetchData();
+        fetchData(userId);
         setClicks();
     }
 
-    private void fetchData() {
+    private void fetchData(String userId) {
         ApiService service = new RetrofitClient().create();
         Observable<List<ClientResponse>> get = null;
 
-        get = service.getClients();
+        get = service.getClients(userId);
         List<ClientResponse> list = new ArrayList<>();
         disposable = get
                 .subscribeOn(Schedulers.io())

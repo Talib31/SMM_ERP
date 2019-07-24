@@ -105,6 +105,7 @@ public class MainAdapter extends ExpandableRecyclerViewAdapter<TitleParentViewHo
         });
     }
 
+
     @Override
     public void onBindGroupViewHolder(TitleParentViewHolder holder, int flatPosition, ExpandableGroup group) {
         Typeface avenir_book = Typeface.createFromAsset(context.getAssets(),"fonts/AvenirBook.ttf");

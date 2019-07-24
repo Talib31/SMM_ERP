@@ -22,6 +22,7 @@ public class TitleParentViewHolder extends GroupViewHolder {
         super(itemView);
         title = itemView.findViewById(R.id.parent_title);
         expand = itemView.findViewById(R.id.expand_parent);
+        collapse();
     }
 
     public void setGenreTitle(ExpandableGroup genre,Typeface typeface) {
@@ -37,4 +38,6 @@ public class TitleParentViewHolder extends GroupViewHolder {
             }
         }
     }
+
+
 }

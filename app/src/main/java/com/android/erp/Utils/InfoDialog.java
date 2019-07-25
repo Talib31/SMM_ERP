@@ -10,8 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.android.erp.FirstHomeActivity;
 import com.android.erp.Network.ApiService;
 import com.android.erp.Network.Response.ResultResponse;
 import com.android.erp.Network.RetrofitClient;
@@ -25,6 +27,7 @@ import io.reactivex.schedulers.Schedulers;
 public class InfoDialog extends AppCompatDialogFragment {
 
     private AppCompatEditText companyNameEditText,adminNameEditText,phoneEditText,mailEditText,addressEditText,siteEditText;
+    private ProgressBar progressBar;
     private String displayName="",adminName="",phone="",mail="",address="",site="",userId="";
     private Button changeBtn;
 
@@ -60,6 +63,8 @@ public class InfoDialog extends AppCompatDialogFragment {
             address=addressEditText.getEditableText().toString();
             site=siteEditText.getEditableText().toString();
 
+            progressBar.setVisibility(View.VISIBLE);
+            changeBtn.setVisibility(View.INVISIBLE);
             saveToDatabase(userId,displayName,phone,mail,address,site);
 
 
@@ -95,7 +100,7 @@ public class InfoDialog extends AppCompatDialogFragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnError(error -> GeneralUtils.largeLog("doOnErrorEventsFragmentCall", error.getMessage()))
                 .doOnComplete(() -> {
-
+                    progressBar.setVisibility(View.INVISIBLE);
                 })
                 .subscribe(event -> {
                             dism(event);
@@ -107,14 +112,20 @@ public class InfoDialog extends AppCompatDialogFragment {
 
     private void dism(ResultResponse event) {
         if (event.getResult().equals("fail")){
+            progressBar.setVisibility(View.INVISIBLE);
+            changeBtn.setVisibility(View.VISIBLE);
             Toast.makeText(getContext(),"Sorry,we can't complete your process",Toast.LENGTH_LONG).show();
         }else {
+            progressBar.setVisibility(View.INVISIBLE);
+            changeBtn.setVisibility(View.VISIBLE);
             Toast.makeText(getContext(),"Completed",Toast.LENGTH_LONG).show();
             dismiss();
+            ((FirstHomeActivity)getActivity()).update();
         }
     }
 
     private void initData(View view) {
+        progressBar = view.findViewById(R.id.changeProgress);
         changeBtn=view.findViewById(R.id.buttonChange);
         companyNameEditText=view.findViewById(R.id.edtCompanyNameInfo);
         adminNameEditText=view.findViewById(R.id.edtAdminNameInfo);

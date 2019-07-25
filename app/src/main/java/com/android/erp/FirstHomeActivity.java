@@ -87,6 +87,9 @@ public class FirstHomeActivity extends AppCompatActivity {
             main_recycler.setLayoutManager(layoutManager);
             main_recycler.setAdapter(adapter);
     }
+    public void update(){
+        fetchData(userId);
+    }
 
     private void initData(){
         progressBar = findViewById(R.id.firstProgress);

@@ -32,6 +32,7 @@ public class MainAdapter extends ExpandableRecyclerViewAdapter<TitleParentViewHo
     public MainAdapter(List<? extends ExpandableGroup> groups, Context context) {
         super(groups);
         this.context = context;
+        expandAll();
     }
 
     @Override
@@ -57,9 +58,10 @@ public class MainAdapter extends ExpandableRecyclerViewAdapter<TitleParentViewHo
         Typeface avenir_book = Typeface.createFromAsset(context.getAssets(),"fonts/AvenirBook.ttf");
         final TitleChild child = ((TitleParent) group).getItems().get(childIndex);
         holder.setViews(child.getName(),child.getDone(),child.getUndone(),avenir_book);
-        Log.d("dasdas",flatPosition + " " + childIndex);
+        Log.d("dasdsasa",flatPosition + " " + childIndex);
         holder.itemView.setOnClickListener(v -> {
             if (flatPosition ==1 || flatPosition == 2 || flatPosition == 3 || flatPosition ==4){
+                Log.d("dasdasa",flatPosition + " " + childIndex);
                 ArrayList<String> pagerModels = new ArrayList<>();
                 ArrayList<String> pagerModelss = new ArrayList<>();
                 pagerModels.add("Twitter");
@@ -71,11 +73,13 @@ public class MainAdapter extends ExpandableRecyclerViewAdapter<TitleParentViewHo
                 pagerModels.add("Linkedin");
                 pagerModelss.add("https://images.vexels.com/media/users/3/137382/isolated/preview/c59b2807ea44f0d70f41ca73c61d281d-linkedin-icon-logo-by-vexels.png");
                 Intent intent = new Intent(context, CategoriesActivity.class);
+
                 intent.putExtra("myList",pagerModels);
                 intent.putExtra("myLists",pagerModelss);
                 intent.putExtra("userId", userId);
                 intent.putExtra("categoryId",String.valueOf(flatPosition));
                 context.startActivity(intent);
+                Log.d("dasdas",flatPosition + " " + childIndex);
             }else if (flatPosition == 6 || flatPosition == 7){
                 ArrayList<String> pagerModels = new ArrayList<>();
                 ArrayList<String> pagerModelss = new ArrayList<>();
@@ -89,6 +93,7 @@ public class MainAdapter extends ExpandableRecyclerViewAdapter<TitleParentViewHo
                 intent.putExtra("userId",userId);
                 intent.putExtra("categoryId",String.valueOf(flatPosition));
                 context.startActivity(intent);
+                Log.d("dasdas",flatPosition + " " + childIndex);
             }else if (flatPosition == 9){
                 ArrayList<String> pagerModels = new ArrayList<>();
                 ArrayList<String> pagerModelss = new ArrayList<>();
@@ -100,7 +105,9 @@ public class MainAdapter extends ExpandableRecyclerViewAdapter<TitleParentViewHo
                 intent.putExtra("userId",userId);
                 intent.putExtra("categoryId",String.valueOf(flatPosition));
                 context.startActivity(intent);
+                Log.d("dasdas",flatPosition + " " + childIndex);
             }
+            //Log.d("dasdas",flatPosition + " " + childIndex);
 
         });
     }
@@ -110,5 +117,20 @@ public class MainAdapter extends ExpandableRecyclerViewAdapter<TitleParentViewHo
     public void onBindGroupViewHolder(TitleParentViewHolder holder, int flatPosition, ExpandableGroup group) {
         Typeface avenir_book = Typeface.createFromAsset(context.getAssets(),"fonts/AvenirBook.ttf");
         holder.setGenreTitle(group,avenir_book);
+    }
+
+    public void expandAll() {
+        for (int i = 0; i < getItemCount(); i++) {
+            if (!isGroupExpanded(i)){
+                toggleGroup(i);
+            }
+        }
+    }
+    public void expandAlls() {
+        for (int i = 0; i < getItemCount(); i++) {
+            if (isGroupExpanded(i)){
+                toggleGroup(i);
+            }
+        }
     }
 }

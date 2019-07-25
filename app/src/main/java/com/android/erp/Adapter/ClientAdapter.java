@@ -45,6 +45,7 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientHold
     public ClientAdapter(Context context, List<ClientResponse> list) {
         this.context = context;
         this.list = list;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -137,6 +138,7 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientHold
                 context.startActivity(intent);
             }
         });
+
     }
 
     @Override

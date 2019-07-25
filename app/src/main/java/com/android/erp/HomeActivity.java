@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
@@ -73,6 +74,8 @@ public class HomeActivity extends AppCompatActivity {
 
     private String month,year,day;
 
+    private PopupMenu p;
+
     private Calendar now;
 
     @Override
@@ -88,6 +91,31 @@ public class HomeActivity extends AppCompatActivity {
         year =  String.valueOf(now.get(Calendar.YEAR));
 
         month = String.valueOf(now.get(Calendar.MONTH) + 1);
+        if (now.get(Calendar.MONTH) == 0 ){
+            date.setText(getResources().getString(R.string.janury));
+        }else if (now.get(Calendar.MONTH) == 1){
+            date.setText(getResources().getString(R.string.february));
+        }else if (now.get(Calendar.MONTH) == 2){
+            date.setText(getResources().getString(R.string.march));
+        }else if (now.get(Calendar.MONTH) == 3){
+            date.setText(getResources().getString(R.string.april));
+        }else if (now.get(Calendar.MONTH) == 4){
+            date.setText(getResources().getString(R.string.may));
+        }else if (now.get(Calendar.MONTH) == 5){
+            date.setText(getResources().getString(R.string.june));
+        }else if (now.get(Calendar.MONTH) == 6){
+            date.setText(getResources().getString(R.string.july));
+        }else if (now.get(Calendar.MONTH) == 7){
+            date.setText(getResources().getString(R.string.august));
+        }else if (now.get(Calendar.MONTH) == 8){
+            date.setText(getResources().getString(R.string.september));
+        }else if (now.get(Calendar.MONTH) == 9){
+            date.setText(getResources().getString(R.string.october));
+        }else if (now.get(Calendar.MONTH) == 10){
+            date.setText(getResources().getString(R.string.november));
+        }else if (now.get(Calendar.MONTH) == 11){
+            date.setText(getResources().getString(R.string.december));
+        }
         fetchData(month,year);
         setClicks();
         RecyclerView.ItemAnimator animator = main_recycler.getItemAnimator();
@@ -226,7 +254,73 @@ public class HomeActivity extends AppCompatActivity {
                     video1, video2, sms1, sms2), this);
             main_recycler.setLayoutManager(layoutManager);
             main_recycler.setAdapter(adapter);
+            p = new PopupMenu(HomeActivity.this,lang);
+            p.getMenuInflater().inflate(R.menu.main_menu,p.getMenu());
+
+            MenuItem az = p.getMenu().findItem(R.id.az);
+            MenuItem en = p.getMenu().findItem(R.id.en);
+            MenuItem ru = p.getMenu().findItem(R.id.ru);
+            az.setVisible(false);
+            en.setVisible(false);
+            ru.setVisible(false);
             packet.setText(capitalize(event.getPaketName().getName()));
+            SharedPreferences prefs = getSharedPreferences("LANG", MODE_PRIVATE);
+
+            String langs = prefs.getString("lang", "");
+            Log.d("sdasd",langs);
+            for (int i = 0;i<event.getPaketLanguages().size();i++) {
+                String name = event.getPaketLanguages().get(i).getName();
+                if (name.equals("az")){
+                    if (langs.equals("AZ")){
+                        az.setVisible(false);
+                    }else {
+                        az.setVisible(true);
+                    }
+                }else if (name.equals("en")){
+                    if (langs.equals("EN")){
+                        en.setVisible(false);
+                    }else {
+                        en.setVisible(true);
+                    }
+                }else if (name.equals("ru")){
+                    if (langs.equals("RU")){
+                        ru.setVisible(false);
+                    }else {
+                        ru.setVisible(true);
+                    }
+                }
+            }
+            lang.setText(langs.toUpperCase());
+
+
+
+            lang.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+
+                    p.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            SharedPreferences.Editor editor = getSharedPreferences("LANG", MODE_PRIVATE).edit();
+                            editor.putString("lang",String.valueOf(menuItem.getTitle()));
+                            editor.apply();
+                            SharedPreferences prefs = getSharedPreferences("LANG", MODE_PRIVATE);
+                            String langss = prefs.getString("lang", "");
+                            lang.setText(langss.toUpperCase());
+                            if (langss.equals("AZ")){
+                                az.setVisible(false);
+                            }else if (langss.equals("EN")){
+                                en.setVisible(false);
+                            }else if (langs.equals("RU")){
+                                ru.setVisible(false);
+                            }
+                            return true;
+                        }
+                    });
+                    p.show();
+                }
+            });
         }
     }
 
@@ -296,16 +390,16 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void setClicks(){
-        lang.setOnClickListener(v -> {
-            PopupMenu p = new PopupMenu(HomeActivity.this,lang);
-
-            p.getMenuInflater().inflate(R.menu.main_menu,p.getMenu());
-            p.setOnMenuItemClickListener(item -> {
-                Toast.makeText(getApplicationContext(),"s",Toast.LENGTH_SHORT).show();
-                return true;
-            });
-            p.show();
-        });
+//        lang.setOnClickListener(v -> {
+//             p = new PopupMenu(HomeActivity.this,lang);
+//
+//            p.getMenuInflater().inflate(R.menu.main_menu,p.getMenu());
+//            p.setOnMenuItemClickListener(item -> {
+//                Toast.makeText(getApplicationContext(),"s",Toast.LENGTH_SHORT).show();
+//                return true;
+//            });
+//            p.show();
+//        });
         back.setOnClickListener(view -> {
             boolean isAdmin = getSharedPreferences("USER", MODE_PRIVATE).getBoolean("isAdmin", false);
             if (isAdmin) {
@@ -350,18 +444,46 @@ public class HomeActivity extends AppCompatActivity {
                     MonthPickerDialog.Builder builder = new MonthPickerDialog.Builder(HomeActivity.this, new MonthPickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(int selectedMonth, int selectedYear) {
-                            Log.d("dsadasda", "selectedMonth : " + selectedMonth + " selectedYear : " + selectedYear);
-                            Toast.makeText(HomeActivity.this, "Date set with month" + selectedMonth + " year " + selectedYear, Toast.LENGTH_SHORT).show();
+                            Log.d("sddsad",selectedMonth + "  " + selectedYear);
+                            month = String.valueOf(selectedMonth+1);
+                            year = String.valueOf(selectedYear);
+                            if (selectedMonth == 0 ){
+                                date.setText(getResources().getString(R.string.janury));
+                            }else if (selectedMonth == 1){
+                                date.setText(getResources().getString(R.string.february));
+                            }else if (selectedMonth == 2){
+                                date.setText(getResources().getString(R.string.march));
+                            }else if (selectedMonth == 3){
+                                date.setText(getResources().getString(R.string.april));
+                            }else if (selectedMonth == 4){
+                                date.setText(getResources().getString(R.string.may));
+                            }else if (selectedMonth == 5){
+                                date.setText(getResources().getString(R.string.june));
+                            }else if (selectedMonth == 6){
+                                date.setText(getResources().getString(R.string.july));
+                            }else if (selectedMonth == 7){
+                                date.setText(getResources().getString(R.string.august));
+                            }else if (selectedMonth == 8){
+                                date.setText(getResources().getString(R.string.september));
+                            }else if (selectedMonth == 9){
+                                date.setText(getResources().getString(R.string.october));
+                            }else if (selectedMonth == 10){
+                                date.setText(getResources().getString(R.string.november));
+                            }else if (selectedMonth == 11){
+                                date.setText(getResources().getString(R.string.december));
+                            }
+                            progressBar.setVisibility(View.VISIBLE);
+                            main_recycler.setVisibility(View.INVISIBLE);
+                            fetchData(month,year);
+                            Log.d("sf",month + " " + selectedYear);
                         }
                     }, now.get(Calendar.YEAR), now.get(Calendar.MONTH));
 
                     builder.setActivatedMonth(Calendar.JULY)
                             .setMinYear(2010)
-                            .setActivatedYear(2019)
+                            .setActivatedYear(Integer.parseInt(year))
                             .setMaxYear(2030)
-                            .setMinMonth(Calendar.FEBRUARY)
                             .setTitle("Select trading month")
-                            .setMonthRange(Calendar.FEBRUARY, Calendar.NOVEMBER)
                             // .setMaxMonth(Calendar.OCTOBER)
                             // .setYearRange(1890, 1890)
                             // .setMonthAndYearRange(Calendar.FEBRUARY, Calendar.OCTOBER, 1890, 1890)
@@ -370,15 +492,42 @@ public class HomeActivity extends AppCompatActivity {
                             .setOnMonthChangedListener(new MonthPickerDialog.OnMonthChangedListener() {
                                 @Override
                                 public void onMonthChanged(int selectedMonth) {
-                                    Log.d("dsadasda", "Selected month : " + selectedMonth);
-                                    // Toast.makeText(MainActivity.this, " Selected month : " + selectedMonth, Toast.LENGTH_SHORT).show();
+//                                    month = String.valueOf(selectedMonth+1);
+//                                    if (selectedMonth == 0 ){
+//                                        date.setText(getResources().getString(R.string.janury));
+//                                    }else if (selectedMonth == 1){
+//                                        date.setText(getResources().getString(R.string.february));
+//                                    }else if (selectedMonth == 2){
+//                                        date.setText(getResources().getString(R.string.march));
+//                                    }else if (selectedMonth == 3){
+//                                        date.setText(getResources().getString(R.string.april));
+//                                    }else if (selectedMonth == 4){
+//                                        date.setText(getResources().getString(R.string.may));
+//                                    }else if (selectedMonth == 5){
+//                                        date.setText(getResources().getString(R.string.june));
+//                                    }else if (selectedMonth == 6){
+//                                        date.setText(getResources().getString(R.string.july));
+//                                    }else if (selectedMonth == 7){
+//                                        date.setText(getResources().getString(R.string.august));
+//                                    }else if (selectedMonth == 8){
+//                                        date.setText(getResources().getString(R.string.september));
+//                                    }else if (selectedMonth == 9){
+//                                        date.setText(getResources().getString(R.string.october));
+//                                    }else if (selectedMonth == 10){
+//                                        date.setText(getResources().getString(R.string.november));
+//                                    }else if (selectedMonth == 11){
+//                                        date.setText(getResources().getString(R.string.december));
+//                                    }
+//                                    progressBar.setVisibility(View.VISIBLE);
+//                                    main_recycler.setVisibility(View.INVISIBLE);
+//                                    fetchData(month,year);
                                 }
                             })
                             .setOnYearChangedListener(new MonthPickerDialog.OnYearChangedListener() {
                                 @Override
                                 public void onYearChanged(int selectedYear) {
-                                    Log.d("dsadasda", "Selected year : " + selectedYear);
-                                    // Toast.makeText(MainActivity.this, " Selected year : " + selectedYear, Toast.LENGTH_SHORT).show();
+//                                    year = String.valueOf(selectedYear);
+//                                    fetchData(month,year);
                                 }
                             })
                             .build()
@@ -394,10 +543,17 @@ public class HomeActivity extends AppCompatActivity {
 //                return true;
 //            });
 //            p.show();
+
         });
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        progressBar.setVisibility(View.VISIBLE);
+        main_recycler.setVisibility(View.INVISIBLE);
+        fetchData(month,year);
+    }
 
     private void visible(){
         packet.setVisibility(View.VISIBLE);
@@ -406,6 +562,7 @@ public class HomeActivity extends AppCompatActivity {
         line.setVisibility(View.VISIBLE);
         main_recycler.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
+        lang.setVisibility(View.VISIBLE);
     }
     private void invisible(){
         packet.setVisibility(View.INVISIBLE);
@@ -414,6 +571,7 @@ public class HomeActivity extends AppCompatActivity {
         line.setVisibility(View.INVISIBLE);
         main_recycler.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
+        lang.setVisibility(View.INVISIBLE);
     }
 
     @Override

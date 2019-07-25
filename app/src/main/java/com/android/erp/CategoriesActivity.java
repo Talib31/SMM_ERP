@@ -29,6 +29,7 @@ import com.android.erp.Network.RetrofitClient;
 import com.android.erp.Utils.CardPagerAdapter;
 import com.android.erp.Utils.GeneralUtils;
 import com.android.erp.Utils.ShadowTransformer;
+import com.whiteelephant.monthpicker.MonthPickerDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -78,7 +79,34 @@ public class CategoriesActivity extends AppCompatActivity {
         initData();
         setClicks();
         initViewPager();
-        fetchData(categoryId);
+        if (now.get(Calendar.MONTH) == 0 ){
+            date.setText(getResources().getString(R.string.janury));
+        }else if (now.get(Calendar.MONTH) == 1){
+            date.setText(getResources().getString(R.string.february));
+        }else if (now.get(Calendar.MONTH) == 2){
+            date.setText(getResources().getString(R.string.march));
+        }else if (now.get(Calendar.MONTH) == 3){
+            date.setText(getResources().getString(R.string.april));
+        }else if (now.get(Calendar.MONTH) == 4){
+            date.setText(getResources().getString(R.string.may));
+        }else if (now.get(Calendar.MONTH) == 5){
+            date.setText(getResources().getString(R.string.june));
+        }else if (now.get(Calendar.MONTH) == 6){
+            date.setText(getResources().getString(R.string.july));
+        }else if (now.get(Calendar.MONTH) == 7){
+            date.setText(getResources().getString(R.string.august));
+        }else if (now.get(Calendar.MONTH) == 8){
+            date.setText(getResources().getString(R.string.september));
+        }else if (now.get(Calendar.MONTH) == 9){
+            date.setText(getResources().getString(R.string.october));
+        }else if (now.get(Calendar.MONTH) == 10){
+            date.setText(getResources().getString(R.string.november));
+        }else if (now.get(Calendar.MONTH) == 11){
+            date.setText(getResources().getString(R.string.december));
+        }
+
+
+        fetchData(categoryId,month,year);
 
     }
 
@@ -150,16 +178,16 @@ public class CategoriesActivity extends AppCompatActivity {
 
 
                         case 0:
-                            fetchData("3");
+                            fetchData("3",month,year);
                             break;
                         case 1:
-                            fetchData("1");
+                            fetchData("1",month,year);
                             break;
                         case 2:
-                            fetchData("2");
+                            fetchData("2",month,year);
                             break;
                         case 3:
-                            fetchData("4");
+                            fetchData("4",month,year);
                             break;
                     }
 
@@ -179,10 +207,10 @@ public class CategoriesActivity extends AppCompatActivity {
 
 
                         case 0:
-                            fetchData("6");
+                            fetchData("6",month,year);
                             break;
                         case 1:
-                            fetchData("7");
+                            fetchData("7",month,year);
                             break;
 
                     }
@@ -192,7 +220,7 @@ public class CategoriesActivity extends AppCompatActivity {
                 else if (categoryId.equals("9")){
                    categoriesProgress.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.INVISIBLE);
-                    fetchData("9");
+                    fetchData("9",month,year);
                 }
             }
 
@@ -205,7 +233,7 @@ public class CategoriesActivity extends AppCompatActivity {
     private String capitalize(String word){
         return word.substring(0,1).toUpperCase() + word.substring(1);
     }
-    private void fetchData(String categoryId) {
+    private void fetchData(String categoryId,String  month,String year) {
         ApiService service = new RetrofitClient().create();
         Observable<List<CategoriesResponse>> get = null;
 
@@ -237,13 +265,109 @@ public class CategoriesActivity extends AppCompatActivity {
         });
         back.setOnClickListener(v -> finish());
         date.setOnClickListener(v -> {
-            PopupMenu p = new PopupMenu(this,date);
-            p.getMenuInflater().inflate(R.menu.date_menu,p.getMenu());
-            p.setOnMenuItemClickListener(item -> {
-                date.setText(item.getTitle());
-                return true;
-            });
-            p.show();
+            MonthPickerDialog.Builder builder = new MonthPickerDialog.Builder(CategoriesActivity.this, new MonthPickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(int selectedMonth, int selectedYear) {
+                    Log.d("sddsad",selectedMonth + "  " + selectedYear);
+                    month = String.valueOf(selectedMonth+1);
+                    year = String.valueOf(selectedYear);
+                    if (selectedMonth == 0 ){
+                        date.setText(getResources().getString(R.string.janury));
+                    }else if (selectedMonth == 1){
+                        date.setText(getResources().getString(R.string.february));
+                    }else if (selectedMonth == 2){
+                        date.setText(getResources().getString(R.string.march));
+                    }else if (selectedMonth == 3){
+                        date.setText(getResources().getString(R.string.april));
+                    }else if (selectedMonth == 4){
+                        date.setText(getResources().getString(R.string.may));
+                    }else if (selectedMonth == 5){
+                        date.setText(getResources().getString(R.string.june));
+                    }else if (selectedMonth == 6){
+                        date.setText(getResources().getString(R.string.july));
+                    }else if (selectedMonth == 7){
+                        date.setText(getResources().getString(R.string.august));
+                    }else if (selectedMonth == 8){
+                        date.setText(getResources().getString(R.string.september));
+                    }else if (selectedMonth == 9){
+                        date.setText(getResources().getString(R.string.october));
+                    }else if (selectedMonth == 10){
+                        date.setText(getResources().getString(R.string.november));
+                    }else if (selectedMonth == 11){
+                        date.setText(getResources().getString(R.string.december));
+                    }
+                    categoriesProgress.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.INVISIBLE);
+                    fetchData(categoryId,month,year);
+                    Log.d("sf",month + " " + selectedYear);
+                }
+            }, now.get(Calendar.YEAR), now.get(Calendar.MONTH));
+
+            builder.setActivatedMonth(Calendar.JULY)
+                    .setMinYear(2010)
+                    .setActivatedYear(Integer.parseInt(year))
+                    .setMaxYear(2030)
+                    .setTitle("Select trading month")
+                    // .setMaxMonth(Calendar.OCTOBER)
+                    // .setYearRange(1890, 1890)
+                    // .setMonthAndYearRange(Calendar.FEBRUARY, Calendar.OCTOBER, 1890, 1890)
+                    //.showMonthOnly()
+                    // .showYearOnly()
+                    .setOnMonthChangedListener(new MonthPickerDialog.OnMonthChangedListener() {
+                        @Override
+                        public void onMonthChanged(int selectedMonth) {
+//                                    month = String.valueOf(selectedMonth+1);
+//                                    if (selectedMonth == 0 ){
+//                                        date.setText(getResources().getString(R.string.janury));
+//                                    }else if (selectedMonth == 1){
+//                                        date.setText(getResources().getString(R.string.february));
+//                                    }else if (selectedMonth == 2){
+//                                        date.setText(getResources().getString(R.string.march));
+//                                    }else if (selectedMonth == 3){
+//                                        date.setText(getResources().getString(R.string.april));
+//                                    }else if (selectedMonth == 4){
+//                                        date.setText(getResources().getString(R.string.may));
+//                                    }else if (selectedMonth == 5){
+//                                        date.setText(getResources().getString(R.string.june));
+//                                    }else if (selectedMonth == 6){
+//                                        date.setText(getResources().getString(R.string.july));
+//                                    }else if (selectedMonth == 7){
+//                                        date.setText(getResources().getString(R.string.august));
+//                                    }else if (selectedMonth == 8){
+//                                        date.setText(getResources().getString(R.string.september));
+//                                    }else if (selectedMonth == 9){
+//                                        date.setText(getResources().getString(R.string.october));
+//                                    }else if (selectedMonth == 10){
+//                                        date.setText(getResources().getString(R.string.november));
+//                                    }else if (selectedMonth == 11){
+//                                        date.setText(getResources().getString(R.string.december));
+//                                    }
+//                                    progressBar.setVisibility(View.VISIBLE);
+//                                    main_recycler.setVisibility(View.INVISIBLE);
+//                                    fetchData(month,year);
+                        }
+                    })
+                    .setOnYearChangedListener(new MonthPickerDialog.OnYearChangedListener() {
+                        @Override
+                        public void onYearChanged(int selectedYear) {
+//                                    year = String.valueOf(selectedYear);
+//                                    fetchData(month,year);
+                        }
+                    })
+                    .build()
+                    .show();
+
+
+            //showDialog(DATE_DIALOG_ID);
+            //calendarShow();
+//            PopupMenu p = new PopupMenu(HomeActivity.this,date);
+//            p.getMenuInflater().inflate(R.menu.date_menu,p.getMenu());
+//            p.setOnMenuItemClickListener(item -> {
+//                date.setText(item.getTitle());
+//                return true;
+//            });
+//            p.show();
+
         });
     }
 
@@ -268,6 +392,29 @@ public class CategoriesActivity extends AppCompatActivity {
         title.setTypeface(avenir_light);
         packet.setTypeface(avenir_black);
         lang.setTypeface(avenir_light);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        int currentItem=Integer.parseInt(categoryId);
+
+        if (currentItem<5){
+
+            if (currentItem==3)
+                currentItem=0;
+
+        }
+
+        else {
+            if (currentItem<8)
+                currentItem-=6;
+            else
+                currentItem-=9;
+        }
+        mCardAdapter = new CardPagerAdapter(currentItem);
+        fetchData(categoryId,month,year);
+        Log.d("dsa","resune");
     }
 
 

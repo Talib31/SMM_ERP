@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +33,7 @@ public class MainAdapter extends ExpandableRecyclerViewAdapter<TitleParentViewHo
     public MainAdapter(List<? extends ExpandableGroup> groups, Context context) {
         super(groups);
         this.context = context;
-        expandAll();
+        //expandAll();
     }
 
     @Override
@@ -58,9 +59,23 @@ public class MainAdapter extends ExpandableRecyclerViewAdapter<TitleParentViewHo
         Typeface avenir_book = Typeface.createFromAsset(context.getAssets(),"fonts/AvenirBook.ttf");
         final TitleChild child = ((TitleParent) group).getItems().get(childIndex);
         holder.setViews(child.getName(),child.getDone(),child.getUndone(),avenir_book);
+
         Log.d("dasdsasa",flatPosition + " " + childIndex);
         holder.itemView.setOnClickListener(v -> {
-            if (flatPosition ==1 || flatPosition == 2 || flatPosition == 3 || flatPosition ==4){
+            List<TitleChild>list=((TitleParent)group).getItems();
+            ArrayList<TitleChild>childList=new ArrayList<>(list);
+            Log.d("TitleChildname",childList.get(childIndex).getName());
+            Intent intent = new Intent(context, CategoriesActivity.class);
+            intent.putParcelableArrayListExtra("childList",childList);
+            intent.putExtra("userId", userId);
+            Log.d("userIddd",userId);
+            intent.putExtra("categoryId",childList.get(childIndex).getCategoryId());
+            Log.d("flatposindex","Flatpos: "+flatPosition+" Index: "+childIndex);
+            context.startActivity(intent);
+
+
+
+            /*if (flatPosition ==1 || flatPosition == 2 || flatPosition == 3 || flatPosition ==4){
                 Log.d("dasdasa",flatPosition + " " + childIndex);
                 ArrayList<String> pagerModels = new ArrayList<>();
                 ArrayList<String> pagerModelss = new ArrayList<>();
@@ -106,7 +121,7 @@ public class MainAdapter extends ExpandableRecyclerViewAdapter<TitleParentViewHo
                 intent.putExtra("categoryId",String.valueOf(flatPosition));
                 context.startActivity(intent);
                 Log.d("dasdas",flatPosition + " " + childIndex);
-            }
+            }*/
             //Log.d("dasdas",flatPosition + " " + childIndex);
 
         });

@@ -348,10 +348,10 @@ public class HomeActivity extends AppCompatActivity {
     }
     public static List<TitleChild> makeDigitalChild(int insta1,int insta2,int fb1,int fb2,int twitter1,int twitter2,
                                                     int linkedin1,int linkedin2) {
-        TitleChild instagram = new TitleChild("Instagram", insta1,insta2);
-        TitleChild facebook = new TitleChild("Facebook", fb1,fb2);
-        TitleChild twitter = new TitleChild("Twitter", twitter1,twitter2);
-        TitleChild linkedin = new TitleChild("Linkedin", linkedin1,linkedin2);
+        TitleChild instagram = new TitleChild("Instagram", insta1,insta2,"http://pluspng.com/img-png/instagram-png-instagram-png-logo-1455.png","1");
+        TitleChild facebook = new TitleChild("Facebook", fb1,fb2,"https://images.vexels.com/media/users/3/137253/isolated/preview/90dd9f12fdd1eefb8c8976903944c026-facebook-icon-logo-by-vexels.png","2");
+        TitleChild twitter = new TitleChild("Twitter", twitter1,twitter2,"https://images.vexels.com/media/users/3/137419/isolated/preview/b1a3fab214230557053ed1c4bf17b46c-twitter-icon-logo-by-vexels.png","3");
+        TitleChild linkedin = new TitleChild("Linkedin", linkedin1,linkedin2,"https://images.vexels.com/media/users/3/137382/isolated/preview/c59b2807ea44f0d70f41ca73c61d281d-linkedin-icon-logo-by-vexels.png","4");
 
 
         return Arrays.asList(instagram, facebook, twitter, linkedin);
@@ -360,8 +360,8 @@ public class HomeActivity extends AppCompatActivity {
         return new TitleParent(name, makePhotoVideoChild(photo1,photo2,video1,video2), active);
     }
     public static List<TitleChild> makePhotoVideoChild(int photo1,int photo2,int video1,int video2) {
-        TitleChild photo = new TitleChild("Photo",photo1 ,photo2);
-        TitleChild video = new TitleChild("Video", video1,video2);
+        TitleChild photo = new TitleChild("Photo",photo1 ,photo2,"https://cdn.pixabay.com/photo/2015/12/22/04/00/photo-1103595_960_720.png","6");
+        TitleChild video = new TitleChild("Video", video1,video2,"https://i.ya-webdesign.com/images/play-button-overlay-png-12.png","7");
 
         return Arrays.asList(photo,video);
     }
@@ -369,7 +369,7 @@ public class HomeActivity extends AppCompatActivity {
         return new TitleParent(name, makeSMSChild(sms1,sms2), active);
     }
     public static List<TitleChild> makeSMSChild(int sms1,int sms2) {
-        TitleChild photo = new TitleChild("SMS", sms1,sms2);
+        TitleChild photo = new TitleChild("SMS", sms1,sms2,"https://image.flaticon.com/icons/png/512/156/156931.png","9");
 
         return Arrays.asList(photo);
     }

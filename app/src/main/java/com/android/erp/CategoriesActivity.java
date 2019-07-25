@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.android.erp.Adapter.AllDataAdapter;
 import com.android.erp.Models.AllDataModel;
 import com.android.erp.Models.PagerModel;
+import com.android.erp.Models.TitleChild;
 import com.android.erp.Network.ApiService;
 import com.android.erp.Network.Response.CategoriesResponse;
 import com.android.erp.Network.Response.HomeResponse;
@@ -111,13 +112,20 @@ public class CategoriesActivity extends AppCompatActivity {
     }
 
     private void initViewPager() {
-        ArrayList<String> list = new ArrayList<>();
-        ArrayList<String> lists = new ArrayList<>();
-        list = (ArrayList<String>)getIntent().getSerializableExtra("myList");
-        lists = (ArrayList<String>)getIntent().getSerializableExtra("myLists");
+        ArrayList<TitleChild> list = new ArrayList<>();
+       // ArrayList<String> lists = new ArrayList<>();
+
+
+        list=getIntent().getParcelableArrayListExtra("childList");
+        categoryId=getIntent().getStringExtra("categoryId");
+        Log.d("categoryIdg",categoryId);
+       // list = (ArrayList<String>)getIntent().getSerializableExtra("myList");
+       // lists = (ArrayList<String>)getIntent().getSerializableExtra("myLists");
         List<PagerModel> pagerModels = new ArrayList<>();
         for (int i = 0;i<list.size();i++){
-            pagerModels.add(new PagerModel(list.get(i),lists.get(i)));
+            Log.d("listSize",list.size()+" ");
+            TitleChild child=list.get(i);
+            pagerModels.add(new PagerModel(child.getName(),child.getImgurl()));
         }
 //        pagerModels.add(new PagerModel("Twitter","https://images.vexels.com/media/users/3/137419/isolated/preview/b1a3fab214230557053ed1c4bf17b46c-twitter-icon-logo-by-vexels.png"));
 //        pagerModels.add(new PagerModel("Instagram","http://pluspng.com/img-png/instagram-png-instagram-png-logo-1455.png"));
@@ -125,11 +133,9 @@ public class CategoriesActivity extends AppCompatActivity {
 //        pagerModels.add(new PagerModel("Linkedin","https://images.vexels.com/media/users/3/137382/isolated/preview/c59b2807ea44f0d70f41ca73c61d281d-linkedin-icon-logo-by-vexels.png"));
 
         int currentItem=Integer.parseInt(categoryId);
-
         if (currentItem<5){
 
-            if (currentItem==3)
-                currentItem=0;
+            currentItem-=1;
 
         }
 
@@ -139,6 +145,7 @@ public class CategoriesActivity extends AppCompatActivity {
             else
                 currentItem-=9;
         }
+
         mCardAdapter = new CardPagerAdapter(currentItem);
         for (PagerModel mservice :pagerModels){
             mCardAdapter.addCardItem(mservice,getApplicationContext(), GeneralUtils.convertDpToPixel(2));
@@ -161,6 +168,8 @@ public class CategoriesActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int i) {
+                //categoryId=getIntent().getStringExtra("categoryId");
+                Log.d("categoryIdI",categoryId);
 
                 if (categoryId.equals("1") || categoryId.equals("2") || categoryId.equals("4") || categoryId.equals("3")){
                     categoriesProgress.setVisibility(View.VISIBLE);
@@ -178,13 +187,13 @@ public class CategoriesActivity extends AppCompatActivity {
 
 
                         case 0:
-                            fetchData("3",month,year);
-                            break;
-                        case 1:
                             fetchData("1",month,year);
                             break;
-                        case 2:
+                        case 1:
                             fetchData("2",month,year);
+                            break;
+                        case 2:
+                            fetchData("3",month,year);
                             break;
                         case 3:
                             fetchData("4",month,year);
@@ -398,11 +407,10 @@ public class CategoriesActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         int currentItem=Integer.parseInt(categoryId);
-
+        Log.d("currentItemIddd",currentItem+" ");
         if (currentItem<5){
 
-            if (currentItem==3)
-                currentItem=0;
+            currentItem-=1;
 
         }
 
@@ -412,6 +420,7 @@ public class CategoriesActivity extends AppCompatActivity {
             else
                 currentItem-=9;
         }
+        Log.d("currentItemIddd",currentItem+" ");
         mCardAdapter = new CardPagerAdapter(currentItem);
         fetchData(categoryId,month,year);
         Log.d("dsa","resune");

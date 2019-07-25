@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
         mData = new ArrayList<>();
         mViews = new ArrayList<>();
         this.position=position;
+        Log.d("positionnn",position+" ");
     }
 
 
@@ -114,12 +116,16 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
         tvBannersSlider.setTextColor(context.getResources().getColor(R.color.deactive));
     }
     public void change(int position){
+        Log.d("currentItemIdd","position: "+position);
         for (int i=0;i<getCount();i++){
             CardView currentCard=mViews.get(i);
 
             if (currentCard!=null) {
                 TextView textView=currentCard.findViewById(R.id.pager_text);
+                Log.d("currentItemIddsms","position: "+position);
+
                 if (i == position) {
+                    Log.d("currentItemIddsms","position: "+position);
                     currentCard.setCardBackgroundColor(context.getResources().getColor(R.color.textColor2));
                     textView.setTextColor(context.getResources().getColor(R.color.white));
 

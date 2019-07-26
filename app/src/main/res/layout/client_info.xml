@@ -27,14 +27,37 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/pass_layout_info"
-        android:layout_below="@id/text_layout_info"
+        android:id="@+id/text_layout_info_password"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/text_layout_info"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/edtPasswordInfo"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:inputType="textPassword"
+            android:textColorHint="@color/textColor"
+            android:textColor="@color/textColor"
+            android:hint="@string/passHintInfo"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+    </android.support.design.widget.TextInputLayout>
+
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/adminname_layout_info"
+        android:layout_below="@id/text_layout_info_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/edtAdminNameInfo"
             android:hint="@string/m_sul_xs"
+            android:enabled="false"
             android:inputType="textPersonName"
             android:textColor="@color/textColor"
             android:layout_marginStart="10dp"
@@ -47,7 +70,7 @@
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/text_layout_info_tel"
-        android:layout_below="@id/pass_layout_info"
+        android:layout_below="@id/adminname_layout_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

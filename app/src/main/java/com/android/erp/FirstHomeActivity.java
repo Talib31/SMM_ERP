@@ -87,6 +87,7 @@ public class FirstHomeActivity extends AppCompatActivity {
     }
 
     private void addData(List<ClientResponse> event) {
+
             adapter = new ClientAdapter(this,event);
             main_recycler.setLayoutManager(layoutManager);
             main_recycler.setAdapter(adapter);
@@ -124,8 +125,13 @@ public class FirstHomeActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(view -> {
             InfoDialog dialog = new InfoDialog();
 
-//                Bundle args=new Bundle();
-//                args.putString("displayName",list.get(i).getDisplayname());
+                Bundle args=new Bundle();
+                String adminName=getIntent().getStringExtra("adminName");
+                adminName=getSharedPreferences("USER",MODE_PRIVATE).getString("adminName","");
+                args.putString("adminName",adminName);
+                args.putString("adminId",userId);
+                args.putBoolean("createUser",true);
+                dialog.setArguments(args);
 //                args.putString("mail",list.get(i).getUsername());
 //                args.putString("adminName",list.get(i).getAdminName());
 //                args.putString("phone",list.get(i).getTelephone());
@@ -136,7 +142,7 @@ public class FirstHomeActivity extends AppCompatActivity {
 //
 //
 //
-//                dialog.setArguments(args);
+//
 
             dialog.show(getSupportFragmentManager(),"example dialog");
         });
@@ -175,6 +181,7 @@ public class FirstHomeActivity extends AppCompatActivity {
                     editors.apply();
                     SharedPreferences.Editor editor = getSharedPreferences("USER", MODE_PRIVATE).edit();
                     editor.putString("userId", "");
+                    editor.putString("adminName","");
                     editor.putBoolean("check",false);
                     editor.putBoolean("isAdmin",false);
                     editor.apply();

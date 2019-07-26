@@ -193,11 +193,13 @@ public class LoginActivity extends AppCompatActivity {
             }else {
                 SharedPreferences.Editor editor = getSharedPreferences("USER", MODE_PRIVATE).edit();
                 editor.putString("userId", loginResponse.getUser().getUserId());
+                editor.putString("adminName",loginResponse.getUser().getDisplayname());
                 editor.putBoolean("check",true);
                 editor.putBoolean("isAdmin",true);
                 editor.apply();
                 Intent intent = new Intent(getApplicationContext(),FirstHomeActivity.class);
                 intent.putExtra("userId",loginResponse.getUser().getUserId());
+                intent.putExtra("adminName",loginResponse.getUser().getDisplayname());
                 startActivity(intent);
                 finish();
             }

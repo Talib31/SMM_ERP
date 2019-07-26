@@ -121,6 +121,8 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientHold
                 args.putString("address",list.get(i).getPlace());
                 args.putString("site",list.get(i).getSite());
                 args.putString("userId",list.get(i).getUserId());
+                args.putString("password",list.get(i).getPassword());
+                args.putString("adminId",userId);
 
 
 
@@ -157,14 +159,14 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientHold
             info = itemView.findViewById(R.id.infoB);
         }
     }
-    private void saveToDatabase(String userId, String displayName, String phone, String mail, String address, String site) {
+    private void saveToDatabase(String userId,String password,String adminId, String displayName, String phone, String mail, String address, String site) {
 
         //TODO Url=http://mealappeazi.alwaysdata.net/erpapp/adduser.php
         // parametrs: userId,displayname,telephone,username,address,site
         ApiService service = new RetrofitClient().create();
         Observable<ResultResponse> result = null;
 
-        result = service.addUser(userId,displayName,phone,mail,address,site);
+        result = service.addUser(userId,password,adminId,displayName,phone,mail,address,site);
         disposable = result
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -3,6 +3,7 @@ package com.android.erp.Utils;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.support.v7.widget.AppCompatEditText;
@@ -26,10 +27,13 @@ import io.reactivex.schedulers.Schedulers;
 
 public class InfoDialog extends AppCompatDialogFragment {
 
-    private AppCompatEditText companyNameEditText,adminNameEditText,phoneEditText,mailEditText,addressEditText,siteEditText;
+    private AppCompatEditText companyNameEditText,passwordEditText,adminNameEditText,phoneEditText,mailEditText,addressEditText,siteEditText;
+    private TextInputLayout passLayout;
     private ProgressBar progressBar;
-    private String displayName="",adminName="",phone="",mail="",address="",site="",userId="";
+    private String displayName="",adminName="",phone="",mail="",address="",site="",userId="",password="",adminId="";
+    private boolean createUser;
     private Button changeBtn;
+
 
     private Disposable disposable;
 
@@ -42,6 +46,7 @@ public class InfoDialog extends AppCompatDialogFragment {
         Bundle userData=getArguments();
 
         if (userData!=null) {
+             createUser=userData.getBoolean("createUser");
              displayName = userData.getString("displayName");
              adminName = userData.getString("adminName");
              phone = userData.getString("phone");
@@ -49,6 +54,8 @@ public class InfoDialog extends AppCompatDialogFragment {
              address = userData.getString("address");
              site = userData.getString("site");
              userId=userData.getString("userId");
+             password=userData.getString("password");
+             adminId=userData.getString("adminId");
 
         }
         initData(view);
@@ -62,10 +69,13 @@ public class InfoDialog extends AppCompatDialogFragment {
             phone=phoneEditText.getEditableText().toString();
             address=addressEditText.getEditableText().toString();
             site=siteEditText.getEditableText().toString();
+            password=passwordEditText.getEditableText().toString();
 
             progressBar.setVisibility(View.VISIBLE);
             changeBtn.setVisibility(View.INVISIBLE);
-            saveToDatabase(userId,displayName,phone,mail,address,site);
+
+
+            saveToDatabase(userId,password,adminId,displayName,phone,mail,address,site);
 
 
         });
@@ -87,14 +97,14 @@ public class InfoDialog extends AppCompatDialogFragment {
 
     }
 
-    private void saveToDatabase(String userId, String displayName, String phone, String mail, String address, String site) {
+    private void saveToDatabase(String userId,String password,String adminId, String displayName, String phone, String mail, String address, String site) {
 
         //TODO Url=http://mealappeazi.alwaysdata.net/erpapp/adduser.php
-        // parametrs: userId,displayname,telephone,username,address,site
+        // parametrs: userId,password,adminId,displayname,telephone,username,address,site
         ApiService service = new RetrofitClient().create();
         Observable<ResultResponse> result = null;
 
-        result = service.addUser(userId,displayName,phone,mail,address,site);
+        result = service.addUser(userId,password,adminId,displayName,phone,mail,address,site);
         disposable = result
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -133,6 +143,8 @@ public class InfoDialog extends AppCompatDialogFragment {
         mailEditText=view.findViewById(R.id.edtMailInfomail);
         addressEditText=view.findViewById(R.id.edtMailInfoAddress);
         siteEditText=view.findViewById(R.id.edtMailInfoSite);
+        passwordEditText=view.findViewById(R.id.edtPasswordInfo);
+        passLayout=view.findViewById(R.id.text_layout_info_password);
 
 
         companyNameEditText.setText(displayName);
@@ -141,6 +153,14 @@ public class InfoDialog extends AppCompatDialogFragment {
         mailEditText.setText(mail);
         addressEditText.setText(address);
         siteEditText.setText(site);
+        passwordEditText.setText(password);
+
+        if (createUser){
+            changeBtn.setText("Add User");
+            passLayout.setVisibility(View.VISIBLE);
+
+
+        }
 
 
 

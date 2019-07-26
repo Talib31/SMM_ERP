@@ -78,10 +78,15 @@ public class HomeActivity extends AppCompatActivity {
 
     private Calendar now;
 
+    private boolean checkAz,checkRu,checkEn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        checkAz = false;
+        checkEn = false;
+        checkRu = false;
         userId = getIntent().getStringExtra("userId");
         initData();
         invisible();
@@ -251,7 +256,7 @@ public class HomeActivity extends AppCompatActivity {
                     animName,anim_check,infName,inf_check,kivName,kiv_check,
                     insta1, insta2, fb1, fb2, twitter1, twitter2,
                     linkedin1, linkedin2, photo1, photo2,
-                    video1, video2, sms1, sms2), this);
+                    video1, video2, sms1, sms2), this,checkAz,checkRu,checkEn);
             main_recycler.setLayoutManager(layoutManager);
             main_recycler.setAdapter(adapter);
             p = new PopupMenu(HomeActivity.this,lang);
@@ -271,18 +276,21 @@ public class HomeActivity extends AppCompatActivity {
             for (int i = 0;i<event.getPaketLanguages().size();i++) {
                 String name = event.getPaketLanguages().get(i).getName();
                 if (name.equals("az")){
+                    checkAz =true;
                     if (langs.equals("AZ")){
                         az.setVisible(false);
                     }else {
                         az.setVisible(true);
                     }
                 }else if (name.equals("en")){
+                    checkEn = true;
                     if (langs.equals("EN")){
                         en.setVisible(false);
                     }else {
                         en.setVisible(true);
                     }
                 }else if (name.equals("ru")){
+                    checkRu = true;
                     if (langs.equals("RU")){
                         ru.setVisible(false);
                     }else {
@@ -310,10 +318,28 @@ public class HomeActivity extends AppCompatActivity {
                             lang.setText(langss.toUpperCase());
                             if (langss.equals("AZ")){
                                 az.setVisible(false);
+                                if (checkEn){
+                                    en.setVisible(true);
+                                }
+                                if (checkRu){
+                                    ru.setVisible(true);
+                                }
                             }else if (langss.equals("EN")){
                                 en.setVisible(false);
-                            }else if (langs.equals("RU")){
+                                if (checkAz){
+                                    az.setVisible(true);
+                                }
+                                if (checkRu){
+                                    ru.setVisible(true);
+                                }
+                            }else if (langss.equals("RU")){
                                 ru.setVisible(false);
+                                if (checkAz){
+                                    az.setVisible(true);
+                                }
+                                if (checkEn){
+                                    en.setVisible(true);
+                                }
                             }
                             return true;
                         }
@@ -403,6 +429,9 @@ public class HomeActivity extends AppCompatActivity {
         back.setOnClickListener(view -> {
             boolean isAdmin = getSharedPreferences("USER", MODE_PRIVATE).getBoolean("isAdmin", false);
             if (isAdmin) {
+                SharedPreferences.Editor editor = getSharedPreferences("LANG", MODE_PRIVATE).edit();
+                editor.putString("lang","");
+                editor.apply();
                 finish();
             }
             else {
@@ -424,6 +453,9 @@ public class HomeActivity extends AppCompatActivity {
                 exitDialogBuilder.setPositiveButton(R.string.exitDialogPositiveBtnTxt, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        SharedPreferences.Editor editors = getSharedPreferences("LANG", MODE_PRIVATE).edit();
+                        editors.putString("lang","");
+                        editors.apply();
                         SharedPreferences.Editor editor = getSharedPreferences("USER", MODE_PRIVATE).edit();
                         editor.putString("userId", "");
                         editor.putBoolean("check", false);

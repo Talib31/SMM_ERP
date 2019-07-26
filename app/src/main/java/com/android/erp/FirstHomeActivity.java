@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,6 +28,7 @@ import com.android.erp.Network.Response.ClientResponse;
 import com.android.erp.Network.Response.HomeResponse;
 import com.android.erp.Network.RetrofitClient;
 import com.android.erp.Utils.GeneralUtils;
+import com.android.erp.Utils.InfoDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +46,7 @@ public class FirstHomeActivity extends AppCompatActivity {
     private TextView title,lang;
 
     private RecyclerView main_recycler;
+    private FloatingActionButton floatingActionButton;
     private LinearLayoutManager layoutManager;
     private ClientAdapter adapter;
     private ProgressBar progressBar;
@@ -92,6 +96,7 @@ public class FirstHomeActivity extends AppCompatActivity {
     }
 
     private void initData(){
+        floatingActionButton = findViewById(R.id.clientAddFab);
         progressBar = findViewById(R.id.firstProgress);
         lang = findViewById(R.id.lang_first);
         main_recycler = findViewById(R.id.first_recycler);
@@ -106,14 +111,35 @@ public class FirstHomeActivity extends AppCompatActivity {
         lang.setTypeface(avenir_light);
     }
     private void invisible(){
+        floatingActionButton.setVisibility(View.INVISIBLE);
         main_recycler.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
     }
     private void visible(){
+        floatingActionButton.setVisibility(View.VISIBLE);
         main_recycler.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
     }
     private void setClicks(){
+        floatingActionButton.setOnClickListener(view -> {
+            InfoDialog dialog = new InfoDialog();
+
+//                Bundle args=new Bundle();
+//                args.putString("displayName",list.get(i).getDisplayname());
+//                args.putString("mail",list.get(i).getUsername());
+//                args.putString("adminName",list.get(i).getAdminName());
+//                args.putString("phone",list.get(i).getTelephone());
+//                args.putString("address",list.get(i).getPlace());
+//                args.putString("site",list.get(i).getSite());
+//                args.putString("userId",list.get(i).getUserId());
+//
+//
+//
+//
+//                dialog.setArguments(args);
+
+            dialog.show(getSupportFragmentManager(),"example dialog");
+        });
         lang.setOnClickListener(v -> {
             PopupMenu p = new PopupMenu(FirstHomeActivity.this,lang);
 
@@ -144,7 +170,9 @@ public class FirstHomeActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
 
 
-
+                    SharedPreferences.Editor editors = getSharedPreferences("LANG", MODE_PRIVATE).edit();
+                    editors.putString("lang","");
+                    editors.apply();
                     SharedPreferences.Editor editor = getSharedPreferences("USER", MODE_PRIVATE).edit();
                     editor.putString("userId", "");
                     editor.putBoolean("check",false);

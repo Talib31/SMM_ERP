@@ -29,11 +29,14 @@ import static android.content.Context.MODE_PRIVATE;
 public class MainAdapter extends ExpandableRecyclerViewAdapter<TitleParentViewHolder, TitleChildViewHolder> {
 
     private Context context;
+    private boolean checkAz,checkEn,checkRu;
 
-    public MainAdapter(List<? extends ExpandableGroup> groups, Context context) {
+    public MainAdapter(List<? extends ExpandableGroup> groups, Context context,boolean checkAz,boolean checkRu,boolean checkEn) {
         super(groups);
         this.context = context;
-        //expandAll();
+        this.checkAz = checkAz;
+        this.checkEn = checkEn;
+        this.checkRu = checkRu;
     }
 
     @Override
@@ -68,6 +71,9 @@ public class MainAdapter extends ExpandableRecyclerViewAdapter<TitleParentViewHo
             Intent intent = new Intent(context, CategoriesActivity.class);
             intent.putParcelableArrayListExtra("childList",childList);
             intent.putExtra("userId", userId);
+            intent.putExtra("checkAz",checkAz);
+            intent.putExtra("checkEn",checkEn);
+            intent.putExtra("checkRu",checkRu);
             Log.d("userIddd",userId);
             intent.putExtra("categoryId",childList.get(childIndex).getCategoryId());
             Log.d("flatposindex","Flatpos: "+flatPosition+" Index: "+childIndex);

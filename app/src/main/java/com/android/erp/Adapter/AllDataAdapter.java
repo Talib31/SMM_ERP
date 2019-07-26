@@ -21,10 +21,14 @@ public class AllDataAdapter extends RecyclerView.Adapter<AllDataAdapter.AllDataV
 
     private Context context;
     private List<CategoriesResponse> list;
+    private boolean checkAz,checkEn,checkRu;
 
-    public AllDataAdapter(Context context, List<CategoriesResponse> list) {
+    public AllDataAdapter(Context context, List<CategoriesResponse> list,boolean checkAz,boolean checkEn,boolean checkRu) {
         this.context = context;
         this.list = list;
+        this.checkAz = checkAz;
+        this.checkEn = checkEn;
+        this.checkRu = checkRu;
     }
 
     @NonNull
@@ -63,6 +67,9 @@ public class AllDataAdapter extends RecyclerView.Adapter<AllDataAdapter.AllDataV
             intent.putExtra("text",list.get(i).getText());
             intent.putExtra("price",list.get(i).getAdvertisementPrice());
             intent.putExtra("isdone",name);
+            intent.putExtra("checkAz",checkAz);
+            intent.putExtra("checkEn",checkEn);
+            intent.putExtra("checkRu",checkRu);
             context.startActivity(intent);
         });
     }

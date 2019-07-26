@@ -2,8 +2,10 @@ package com.android.erp;
 
 import android.animation.ArgbEvaluator;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -55,6 +58,9 @@ public class CategoriesActivity extends AppCompatActivity {
     private CardPagerAdapter mCardAdapter;
     private ArgbEvaluator argbEvaluator = new ArgbEvaluator();
     private ProgressBar categoriesProgress;
+    private FloatingActionButton fab;
+
+    private PopupMenu p;
 
     private String month,year,day;
 
@@ -64,13 +70,20 @@ public class CategoriesActivity extends AppCompatActivity {
 
     private Disposable disposable;
 
+    private int currentItem;
+
+    private boolean checkAz,checkEn,checkRu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categories);
         Intent intent = getIntent();
-         userId = intent.getStringExtra("userId");
-         categoryId = intent.getStringExtra("categoryId");
+        userId = intent.getStringExtra("userId");
+        categoryId = intent.getStringExtra("categoryId");
+        checkAz = intent.getBooleanExtra("checkAz",false);
+        checkEn = intent.getBooleanExtra("checkEn",false);
+        checkRu = intent.getBooleanExtra("checkRu",false);
         now = Calendar.getInstance();
         day = String.valueOf(now.get(Calendar.DATE));
 
@@ -132,7 +145,7 @@ public class CategoriesActivity extends AppCompatActivity {
 //        pagerModels.add(new PagerModel("Facebook","https://images.vexels.com/media/users/3/137253/isolated/preview/90dd9f12fdd1eefb8c8976903944c026-facebook-icon-logo-by-vexels.png"));
 //        pagerModels.add(new PagerModel("Linkedin","https://images.vexels.com/media/users/3/137382/isolated/preview/c59b2807ea44f0d70f41ca73c61d281d-linkedin-icon-logo-by-vexels.png"));
 
-        int currentItem=Integer.parseInt(categoryId);
+         currentItem=Integer.parseInt(categoryId);
         if (currentItem<5){
 
             currentItem-=1;
@@ -187,16 +200,20 @@ public class CategoriesActivity extends AppCompatActivity {
 
 
                         case 0:
-                            fetchData("1",month,year);
+                            currentItem =1;
+                            fetchData(String.valueOf(currentItem),month,year);
                             break;
                         case 1:
-                            fetchData("2",month,year);
+                            currentItem =2;
+                            fetchData(String.valueOf(currentItem),month,year);
                             break;
                         case 2:
-                            fetchData("3",month,year);
+                            currentItem =3;
+                            fetchData(String.valueOf(currentItem),month,year);
                             break;
                         case 3:
-                            fetchData("4",month,year);
+                            currentItem =4;
+                            fetchData(String.valueOf(currentItem),month,year);
                             break;
                     }
 
@@ -216,10 +233,12 @@ public class CategoriesActivity extends AppCompatActivity {
 
 
                         case 0:
-                            fetchData("6",month,year);
+                            currentItem =6;
+                            fetchData(String.valueOf(currentItem),month,year);
                             break;
                         case 1:
-                            fetchData("7",month,year);
+                            currentItem =7;
+                            fetchData(String.valueOf(currentItem),month,year);
                             break;
 
                     }
@@ -229,7 +248,8 @@ public class CategoriesActivity extends AppCompatActivity {
                 else if (categoryId.equals("9")){
                    categoriesProgress.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.INVISIBLE);
-                    fetchData("9",month,year);
+                    currentItem = 9;
+                    fetchData(String.valueOf(currentItem),month,year);
                 }
             }
 
@@ -264,11 +284,83 @@ public class CategoriesActivity extends AppCompatActivity {
     }
 
     private void setClicks(){
+        p = new PopupMenu(CategoriesActivity.this,lang);
+        p.getMenuInflater().inflate(R.menu.main_menu,p.getMenu());
+
+        MenuItem az = p.getMenu().findItem(R.id.az);
+        MenuItem en = p.getMenu().findItem(R.id.en);
+        MenuItem ru = p.getMenu().findItem(R.id.ru);
+        az.setVisible(false);
+        en.setVisible(false);
+        ru.setVisible(false);
+        SharedPreferences prefs = getSharedPreferences("LANG", MODE_PRIVATE);
+
+        String langs = prefs.getString("lang", "");
+        if (checkAz){
+            if (langs.equals("AZ")){
+                az.setVisible(false);
+            }else {
+                az.setVisible(true);
+            }
+        }
+        if (checkEn){
+            if (langs.equals("EN")){
+                en.setVisible(false);
+            }else {
+                en.setVisible(true);
+            }
+        }
+        if (checkRu){
+            if (langs.equals("RU")){
+                ru.setVisible(false);
+            }else {
+                ru.setVisible(true);
+            }
+        }
+        lang.setText(langs.toUpperCase());
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
         lang.setOnClickListener(v -> {
-            PopupMenu p = new PopupMenu(this,lang);
-            p.getMenuInflater().inflate(R.menu.main_menu,p.getMenu());
-            p.setOnMenuItemClickListener(item -> {
-                return true;
+            p.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    SharedPreferences.Editor editor = getSharedPreferences("LANG", MODE_PRIVATE).edit();
+                    editor.putString("lang",String.valueOf(menuItem.getTitle()));
+                    editor.apply();
+                    SharedPreferences prefs = getSharedPreferences("LANG", MODE_PRIVATE);
+                    String langss = prefs.getString("lang", "");
+                    lang.setText(langss.toUpperCase());
+                    if (langss.equals("AZ")){
+                        az.setVisible(false);
+                        if (checkEn){
+                            en.setVisible(true);
+                        }
+                        if (checkRu){
+                            ru.setVisible(true);
+                        }
+                    }else if (langss.equals("EN")){
+                        en.setVisible(false);
+                        if (checkAz){
+                            az.setVisible(true);
+                        }
+                        if (checkRu){
+                            ru.setVisible(true);
+                        }
+                    }else if (langss.equals("RU")){
+                        ru.setVisible(false);
+                        if (checkAz){
+                            az.setVisible(true);
+                        }
+                        if (checkEn){
+                            en.setVisible(true);
+                        }
+                    }
+                    return true;
+                }
             });
             p.show();
         });
@@ -307,15 +399,15 @@ public class CategoriesActivity extends AppCompatActivity {
                     }
                     categoriesProgress.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.INVISIBLE);
-                    fetchData(categoryId,month,year);
+                    fetchData(String.valueOf(currentItem),month,year);
                     Log.d("sf",month + " " + selectedYear);
                 }
             }, now.get(Calendar.YEAR), now.get(Calendar.MONTH));
 
             builder.setActivatedMonth(Calendar.JULY)
-                    .setMinYear(2010)
+                    .setMinYear((now.get(Calendar.YEAR)-10))
                     .setActivatedYear(Integer.parseInt(year))
-                    .setMaxYear(2030)
+                    .setMaxYear((now.get(Calendar.YEAR)+10))
                     .setTitle("Select trading month")
                     // .setMaxMonth(Calendar.OCTOBER)
                     // .setYearRange(1890, 1890)
@@ -381,6 +473,7 @@ public class CategoriesActivity extends AppCompatActivity {
     }
 
     private void initData(){
+        fab = findViewById(R.id.postAddFab);
         viewPager = findViewById(R.id.viewPager);
         categoriesProgress = findViewById(R.id.categoriesProgress);
         recyclerView = findViewById(R.id.categories_recycler);
@@ -406,23 +499,7 @@ public class CategoriesActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        int currentItem=Integer.parseInt(categoryId);
-        Log.d("currentItemIddd",currentItem+" ");
-        if (currentItem<5){
-
-            currentItem-=1;
-
-        }
-
-        else {
-            if (currentItem<8)
-                currentItem-=6;
-            else
-                currentItem-=9;
-        }
-        Log.d("currentItemIddd",currentItem+" ");
-        mCardAdapter = new CardPagerAdapter(currentItem);
-        fetchData(categoryId,month,year);
+        fetchData(String.valueOf(currentItem),month,year);
         Log.d("dsa","resune");
     }
 
@@ -442,7 +519,7 @@ public class CategoriesActivity extends AppCompatActivity {
 //            }
 //            list.add(new AllDataModel(response.get(i).getDate(),check));
 //        }
-        allDataAdapter = new AllDataAdapter(this,list);
+        allDataAdapter = new AllDataAdapter(this,list,checkAz,checkEn,checkRu);
         recyclerView.setAdapter(allDataAdapter);
     }
 

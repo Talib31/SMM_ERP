@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -44,11 +45,18 @@ public class PostDetailsActivity extends AppCompatActivity {
     private Dialog myDialog;
 
     private Disposable disposable;
+    private PopupMenu p;
+
+    private boolean checkAz,checkEn,checkRu;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_details);
+        checkAz = getIntent().getBooleanExtra("checkAz",false);
+        checkEn = getIntent().getBooleanExtra("checkEn",false);
+        checkRu = getIntent().getBooleanExtra("checkRu",false);
         userId = getIntent().getStringExtra("userId");
         categoryId = getIntent().getStringExtra("categoryId");
         postId = getIntent().getStringExtra("postId");
@@ -133,6 +141,40 @@ public class PostDetailsActivity extends AppCompatActivity {
         all_name_details.setTypeface(avenir_light);
     }
     private void setClicks(){
+        p = new PopupMenu(PostDetailsActivity.this,lang);
+        p.getMenuInflater().inflate(R.menu.main_menu,p.getMenu());
+
+        MenuItem az = p.getMenu().findItem(R.id.az);
+        MenuItem en = p.getMenu().findItem(R.id.en);
+        MenuItem ru = p.getMenu().findItem(R.id.ru);
+        az.setVisible(false);
+        en.setVisible(false);
+        ru.setVisible(false);
+        SharedPreferences prefs = getSharedPreferences("LANG", MODE_PRIVATE);
+
+        String langs = prefs.getString("lang", "");
+        if (checkAz){
+            if (langs.equals("AZ")){
+                az.setVisible(false);
+            }else {
+                az.setVisible(true);
+            }
+        }
+        if (checkEn){
+            if (langs.equals("EN")){
+                en.setVisible(false);
+            }else {
+                en.setVisible(true);
+            }
+        }
+        if (checkRu){
+            if (langs.equals("RU")){
+                ru.setVisible(false);
+            }else {
+                ru.setVisible(true);
+            }
+        }
+        lang.setText(langs.toUpperCase());
         doneBox.setOnClickListener(v -> {
             if (doneBox.isChecked()){
                 undoneBox.setChecked(false);
@@ -148,11 +190,42 @@ public class PostDetailsActivity extends AppCompatActivity {
             }
         });
         lang.setOnClickListener(v -> {
-            PopupMenu p = new PopupMenu(PostDetailsActivity.this,lang);
-            p.getMenuInflater().inflate(R.menu.main_menu,p.getMenu());
-            p.setOnMenuItemClickListener(item -> {
-                Toast.makeText(getApplicationContext(),"s",Toast.LENGTH_SHORT).show();
-                return true;
+            p.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    SharedPreferences.Editor editor = getSharedPreferences("LANG", MODE_PRIVATE).edit();
+                    editor.putString("lang",String.valueOf(menuItem.getTitle()));
+                    editor.apply();
+                    SharedPreferences prefs = getSharedPreferences("LANG", MODE_PRIVATE);
+                    String langss = prefs.getString("lang", "");
+                    lang.setText(langss.toUpperCase());
+                    if (langss.equals("AZ")){
+                        az.setVisible(false);
+                        if (checkEn){
+                            en.setVisible(true);
+                        }
+                        if (checkRu){
+                            ru.setVisible(true);
+                        }
+                    }else if (langss.equals("EN")){
+                        en.setVisible(false);
+                        if (checkAz){
+                            az.setVisible(true);
+                        }
+                        if (checkRu){
+                            ru.setVisible(true);
+                        }
+                    }else if (langss.equals("RU")){
+                        ru.setVisible(false);
+                        if (checkAz){
+                            az.setVisible(true);
+                        }
+                        if (checkEn){
+                            en.setVisible(true);
+                        }
+                    }
+                    return true;
+                }
             });
             p.show();
         });

@@ -38,7 +38,7 @@ public class PostDetailsActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ImageButton back;
     private TextView title,lang,all_name_details,isDoneDetails,doneConfirm,undDoneConfirm;
-    private String date,isdone,movzu,text,price,userId,categoryId,postId;
+    private String date,isdone="",movzu,text,price,userId,categoryId,postId;
     private CheckBox doneBox,undoneBox;
     private AppCompatEditText date_editText,movzu_editText,metn_editText,reklam_editText;
     private Button confirm;
@@ -124,7 +124,8 @@ public class PostDetailsActivity extends AppCompatActivity {
         title.setTypeface(avenir_light);
         lang.setTypeface(avenir_light);
         isDoneDetails.setTypeface(avenir_light);
-        if (isdone.equals("done")){
+
+        if (isdone!=null&&isdone.equals("done")){
             isDoneDetails.setText(R.string.done);
             isDoneDetails.setTextColor(getResources().getColor(R.color.trueColor));
             doneBox.setChecked(true);

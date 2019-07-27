@@ -76,6 +76,7 @@ public class MainAdapter extends ExpandableRecyclerViewAdapter<TitleParentViewHo
             intent.putExtra("checkRu",checkRu);
             Log.d("userIddd",userId);
             intent.putExtra("categoryId",childList.get(childIndex).getCategoryId());
+            Log.d("CategoryId",childList.get(childIndex).getCategoryId());
             Log.d("flatposindex","Flatpos: "+flatPosition+" Index: "+childIndex);
             context.startActivity(intent);
 

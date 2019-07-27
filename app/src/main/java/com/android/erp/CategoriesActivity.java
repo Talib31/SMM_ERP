@@ -72,7 +72,7 @@ public class CategoriesActivity extends AppCompatActivity {
 
     private int currentItem;
 
-    private boolean checkAz,checkEn,checkRu;
+    private boolean checkAz,checkEn,checkRu,isAdmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +81,7 @@ public class CategoriesActivity extends AppCompatActivity {
         Intent intent = getIntent();
         userId = intent.getStringExtra("userId");
         categoryId = intent.getStringExtra("categoryId");
+        isAdmin=getSharedPreferences("USER",MODE_PRIVATE).getBoolean("isAdmin",false);
         checkAz = intent.getBooleanExtra("checkAz",false);
         checkEn = intent.getBooleanExtra("checkEn",false);
         checkRu = intent.getBooleanExtra("checkRu",false);
@@ -144,7 +145,7 @@ public class CategoriesActivity extends AppCompatActivity {
 //        pagerModels.add(new PagerModel("Instagram","http://pluspng.com/img-png/instagram-png-instagram-png-logo-1455.png"));
 //        pagerModels.add(new PagerModel("Facebook","https://images.vexels.com/media/users/3/137253/isolated/preview/90dd9f12fdd1eefb8c8976903944c026-facebook-icon-logo-by-vexels.png"));
 //        pagerModels.add(new PagerModel("Linkedin","https://images.vexels.com/media/users/3/137382/isolated/preview/c59b2807ea44f0d70f41ca73c61d281d-linkedin-icon-logo-by-vexels.png"));
-
+        fetchData(String.valueOf(categoryId),month,year);
          currentItem=Integer.parseInt(categoryId);
         if (currentItem<5){
 
@@ -173,6 +174,7 @@ public class CategoriesActivity extends AppCompatActivity {
 
 
         viewPager.setCurrentItem(currentItem,true);
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
@@ -246,11 +248,15 @@ public class CategoriesActivity extends AppCompatActivity {
 
 
                 else if (categoryId.equals("9")){
+                    Log.d("SmsClicked","Yes");
                    categoriesProgress.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.INVISIBLE);
                     currentItem = 9;
                     fetchData(String.valueOf(currentItem),month,year);
                 }
+
+                categoryId=String.valueOf(currentItem);
+
             }
 
             @Override
@@ -263,6 +269,8 @@ public class CategoriesActivity extends AppCompatActivity {
         return word.substring(0,1).toUpperCase() + word.substring(1);
     }
     private void fetchData(String categoryId,String  month,String year) {
+
+
         ApiService service = new RetrofitClient().create();
         Observable<List<CategoriesResponse>> get = null;
 
@@ -321,7 +329,13 @@ public class CategoriesActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(CategoriesActivity.this, PostDetailsActivity.class);
+                intent.putExtra("userId",userId);
+                intent.putExtra("categoryId",categoryId);
+                intent.putExtra("checkAz",checkAz);
+                intent.putExtra("checkEn",checkEn);
+                intent.putExtra("checkRu",checkRu);
+                startActivity(intent);
             }
         });
         lang.setOnClickListener(v -> {
@@ -494,6 +508,8 @@ public class CategoriesActivity extends AppCompatActivity {
         title.setTypeface(avenir_light);
         packet.setTypeface(avenir_black);
         lang.setTypeface(avenir_light);
+        if (!isAdmin)
+            fab.hide();
     }
 
     @Override

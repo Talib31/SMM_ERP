@@ -17,6 +17,7 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -237,14 +238,19 @@ public class PostDetailsActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-
+                ProgressBar loa = myDialog.findViewById(R.id.addPostProgress);
                 ImageView question = myDialog.findViewById(R.id.question);
                 TextView lorem = myDialog.findViewById(R.id.lorem);
                 TextView mQusetion = myDialog.findViewById(R.id.main_question);
                 Button buttonLegv = myDialog.findViewById(R.id.btnLegv);
                 Button buttonTesdiq = myDialog.findViewById(R.id.btnTesdqi);
                 buttonLegv.setOnClickListener(v1 -> myDialog.dismiss());
-                buttonTesdiq.setOnClickListener(v12 -> fetchData());
+                buttonTesdiq.setOnClickListener(v12 -> {
+                    loa.setVisibility(View.VISIBLE);
+                    buttonLegv.setVisibility(View.INVISIBLE);
+                    buttonTesdiq.setVisibility(View.INVISIBLE);
+                    fetchData();
+                });
 
                 myDialog.show();
             }

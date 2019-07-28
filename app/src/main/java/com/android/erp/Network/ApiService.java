@@ -1,9 +1,9 @@
 package com.android.erp.Network;
 
 import com.android.erp.Network.Response.CategoriesResponse;
-import com.android.erp.Network.Response.ClientResponse;
+import com.android.erp.Network.Response.ClientsResponse;
+import com.android.erp.Network.Response.Users;
 import com.android.erp.Network.Response.HomeResponse;
-import com.android.erp.Network.Response.InfoResponse;
 import com.android.erp.Network.Response.LoginResponse;
 import com.android.erp.Network.Response.ResultResponse;
 
@@ -12,7 +12,6 @@ import java.util.List;
 import io.reactivex.Observable;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public interface ApiService {
@@ -41,7 +40,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST("allusers.php/")
-    Observable<List<ClientResponse>> getClients(@Field("adminId") String adminId);
+    Observable<ClientsResponse> getClients(@Field("adminId") String adminId);
 
     @FormUrlEncoded
     @POST("addpost.php/")

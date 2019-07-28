@@ -6,22 +6,18 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.erp.HomeActivity;
 import com.android.erp.Network.ApiService;
-import com.android.erp.Network.Response.ClientResponse;
+import com.android.erp.Network.Response.Users;
 import com.android.erp.Network.Response.ResultResponse;
 import com.android.erp.Network.RetrofitClient;
 import com.android.erp.R;
@@ -38,11 +34,11 @@ import io.reactivex.schedulers.Schedulers;
 public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientHolder> {
 
     private Context context;
-    private List<ClientResponse> list;
+    private List<Users> list;
     private Disposable disposable;
     private String displayName="",adminName="",phone="",mail="",address="",site="",userId="";
 
-    public ClientAdapter(Context context, List<ClientResponse> list) {
+    public ClientAdapter(Context context, List<Users> list) {
         this.context = context;
         this.list = list;
         notifyDataSetChanged();

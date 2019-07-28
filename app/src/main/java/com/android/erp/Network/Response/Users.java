@@ -3,7 +3,7 @@ package com.android.erp.Network.Response;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ClientResponse {
+public class Users {
     @SerializedName("userId")
     @Expose
     private String userId;
@@ -13,18 +13,15 @@ public class ClientResponse {
     @SerializedName("password")
     @Expose
     private String password;
-    @SerializedName("token")
-    @Expose
-    private String token;
     @SerializedName("displayname")
     @Expose
     private String displayname;
+    @SerializedName("token")
+    @Expose
+    private String token;
     @SerializedName("paketId")
     @Expose
     private String paketId;
-    @SerializedName("isAdmin")
-    @Expose
-    private String isAdmin;
     @SerializedName("adminName")
     @Expose
     private String adminName;
@@ -34,33 +31,15 @@ public class ClientResponse {
     @SerializedName("place")
     @Expose
     private String place;
-    @SerializedName("paketName")
-    @Expose
-    private String paketName;
     @SerializedName("site")
     @Expose
     private String site;
-
-    public ClientResponse() {
-    }
-
-    public ClientResponse(String userId, String username, String password, String token, String displayname, String paketId, String isAdmin,
-                          String adminName, String telephone, String place, String paketName, String site) {
-        this.userId = userId;
-        this.username = username;
-        this.password = password;
-        this.token = token;
-        this.displayname = displayname;
-        this.paketId = paketId;
-        this.isAdmin = isAdmin;
-        this.adminName = adminName;
-        this.telephone = telephone;
-        this.place = place;
-        this.paketName = paketName;
-        this.site = site;
-    }
-
-
+    @SerializedName("isAdmin")
+    @Expose
+    private String isAdmin;
+    @SerializedName("paketName")
+    @Expose
+    private String paketName;
 
     public String getUserId() {
         return userId;
@@ -86,14 +65,6 @@ public class ClientResponse {
         this.password = password;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
     public String getDisplayname() {
         return displayname;
     }
@@ -102,28 +73,20 @@ public class ClientResponse {
         this.displayname = displayname;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     public String getPaketId() {
         return paketId;
     }
 
     public void setPaketId(String paketId) {
         this.paketId = paketId;
-    }
-
-    public String getIsAdmin() {
-        return isAdmin;
-    }
-
-    public void setIsAdmin(String isAdmin) {
-        this.isAdmin = isAdmin;
-    }
-
-    public String getSite() {
-        return site;
-    }
-
-    public void setSite(String site) {
-        this.site = site;
     }
 
     public String getAdminName() {
@@ -148,6 +111,22 @@ public class ClientResponse {
 
     public void setPlace(String place) {
         this.place = place;
+    }
+
+    public String getSite() {
+        return site;
+    }
+
+    public void setSite(String site) {
+        this.site = site;
+    }
+
+    public String getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(String isAdmin) {
+        this.isAdmin = isAdmin;
     }
 
     public String getPaketName() {

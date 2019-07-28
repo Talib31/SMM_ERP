@@ -120,7 +120,8 @@ public class CategoriesActivity extends AppCompatActivity {
             date.setText(getResources().getString(R.string.december));
         }
 
-
+        categoriesProgress.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.INVISIBLE);
         fetchData(categoryId,month,year);
 
     }
@@ -131,8 +132,6 @@ public class CategoriesActivity extends AppCompatActivity {
 
 
         list=getIntent().getParcelableArrayListExtra("childList");
-        categoryId=getIntent().getStringExtra("categoryId");
-        Log.d("categoryIdg",categoryId);
        // list = (ArrayList<String>)getIntent().getSerializableExtra("myList");
        // lists = (ArrayList<String>)getIntent().getSerializableExtra("myLists");
         List<PagerModel> pagerModels = new ArrayList<>();
@@ -145,7 +144,7 @@ public class CategoriesActivity extends AppCompatActivity {
 //        pagerModels.add(new PagerModel("Instagram","http://pluspng.com/img-png/instagram-png-instagram-png-logo-1455.png"));
 //        pagerModels.add(new PagerModel("Facebook","https://images.vexels.com/media/users/3/137253/isolated/preview/90dd9f12fdd1eefb8c8976903944c026-facebook-icon-logo-by-vexels.png"));
 //        pagerModels.add(new PagerModel("Linkedin","https://images.vexels.com/media/users/3/137382/isolated/preview/c59b2807ea44f0d70f41ca73c61d281d-linkedin-icon-logo-by-vexels.png"));
-        fetchData(String.valueOf(categoryId),month,year);
+        //fetchData(String.valueOf(categoryId),month,year);
          currentItem=Integer.parseInt(categoryId);
         if (currentItem<5){
 
@@ -203,18 +202,26 @@ public class CategoriesActivity extends AppCompatActivity {
 
                         case 0:
                             currentItem =1;
+                            categoriesProgress.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.INVISIBLE);
                             fetchData(String.valueOf(currentItem),month,year);
                             break;
                         case 1:
                             currentItem =2;
+                            categoriesProgress.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.INVISIBLE);
                             fetchData(String.valueOf(currentItem),month,year);
                             break;
                         case 2:
                             currentItem =3;
+                            categoriesProgress.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.INVISIBLE);
                             fetchData(String.valueOf(currentItem),month,year);
                             break;
                         case 3:
                             currentItem =4;
+                            categoriesProgress.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.INVISIBLE);
                             fetchData(String.valueOf(currentItem),month,year);
                             break;
                     }
@@ -236,9 +243,13 @@ public class CategoriesActivity extends AppCompatActivity {
 
                         case 0:
                             currentItem =6;
+                            categoriesProgress.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.INVISIBLE);
                             fetchData(String.valueOf(currentItem),month,year);
                             break;
                         case 1:
+                            categoriesProgress.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.INVISIBLE);
                             currentItem =7;
                             fetchData(String.valueOf(currentItem),month,year);
                             break;
@@ -515,11 +526,17 @@ public class CategoriesActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        fetchData(String.valueOf(currentItem),month,year);
+        //fetchData(String.valueOf(currentItem),month,year);
         Log.d("dsa","resune");
     }
 
-
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        categoriesProgress.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.INVISIBLE);
+        fetchData(String.valueOf(currentItem),month,year);
+    }
 
     private void initRecycler(List<CategoriesResponse> response){
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -537,6 +554,8 @@ public class CategoriesActivity extends AppCompatActivity {
 //        }
         allDataAdapter = new AllDataAdapter(this,list,checkAz,checkEn,checkRu);
         recyclerView.setAdapter(allDataAdapter);
+        categoriesProgress.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
     @Override

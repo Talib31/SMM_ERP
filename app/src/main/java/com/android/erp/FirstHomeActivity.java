@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,17 +14,15 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.erp.Adapter.ClientAdapter;
-import com.android.erp.Adapter.MainAdapter;
 import com.android.erp.Network.ApiService;
-import com.android.erp.Network.Response.ClientResponse;
-import com.android.erp.Network.Response.HomeResponse;
+import com.android.erp.Network.Response.ClientsResponse;
+import com.android.erp.Network.Response.Users;
 import com.android.erp.Network.RetrofitClient;
 import com.android.erp.Utils.GeneralUtils;
 import com.android.erp.Utils.InfoDialog;
@@ -69,24 +66,24 @@ public class FirstHomeActivity extends AppCompatActivity {
 
     private void fetchData(String userId) {
         ApiService service = new RetrofitClient().create();
-        Observable<List<ClientResponse>> get = null;
+        Observable<ClientsResponse> get = null;
 
         get = service.getClients(userId);
-        List<ClientResponse> list = new ArrayList<>();
+        List<Users> list = new ArrayList<>();
         disposable = get
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnError(error -> GeneralUtils.largeLog("doOnErrorEventsFragmentCall", error.getMessage()))
                 .doOnComplete(this::visible)
                 .subscribe(event -> {
-                            addData(event);
+                            addData(event.getUsers());
 
                         },
                         Throwable::getMessage);
 
     }
 
-    private void addData(List<ClientResponse> event) {
+    private void addData(List<Users> event) {
 
             adapter = new ClientAdapter(this,event);
             main_recycler.setLayoutManager(layoutManager);

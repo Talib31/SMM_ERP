@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.android.erp.Adapter.ClientAdapter;
 import com.android.erp.Network.ApiService;
 import com.android.erp.Network.Response.ClientsResponse;
+import com.android.erp.Network.Response.Paket;
 import com.android.erp.Network.Response.Users;
 import com.android.erp.Network.RetrofitClient;
 import com.android.erp.Utils.GeneralUtils;
@@ -48,6 +49,8 @@ public class FirstHomeActivity extends AppCompatActivity {
     private ClientAdapter adapter;
     private ProgressBar progressBar;
     private String userId;
+
+    private List<Paket>pakets;
 
     private Disposable disposable;
     private AlertDialog exitDialog;
@@ -76,16 +79,17 @@ public class FirstHomeActivity extends AppCompatActivity {
                 .doOnError(error -> GeneralUtils.largeLog("doOnErrorEventsFragmentCall", error.getMessage()))
                 .doOnComplete(this::visible)
                 .subscribe(event -> {
-                            addData(event.getUsers());
+                            addData(event.getUsers(),event.getPakets());
+
 
                         },
                         Throwable::getMessage);
 
     }
 
-    private void addData(List<Users> event) {
-
-            adapter = new ClientAdapter(this,event);
+    private void addData(List<Users> event, List<Paket> paketList) {
+            pakets=paketList;
+            adapter = new ClientAdapter(this,event,paketList);
             main_recycler.setLayoutManager(layoutManager);
             main_recycler.setAdapter(adapter);
     }
@@ -128,6 +132,8 @@ public class FirstHomeActivity extends AppCompatActivity {
                 args.putString("adminName",adminName);
                 args.putString("adminId",userId);
                 args.putBoolean("createUser",true);
+                ArrayList<Paket>paketList=new ArrayList<>(pakets);
+                args.putParcelableArrayList("paketList",paketList);
                 dialog.setArguments(args);
 //                args.putString("mail",list.get(i).getUsername());
 //                args.putString("adminName",list.get(i).getAdminName());

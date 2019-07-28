@@ -57,8 +57,9 @@ public interface ApiService {
     Observable<ResultResponse> addUser(@Field("userId") String userId,
                                        @Field("password") String password,
                                        @Field("adminId") String adminId,
-                                   @Field("displayname") String displayName,
-                                   @Field("telephone") String telephone,
+                                       @Field("displayname") String displayName,
+                                       @Field("paketId") String paketId,
+                                       @Field("telephone") String telephone,
                                    @Field("username") String username,
                                    @Field("address") String address,
                                    @Field("site") String site);

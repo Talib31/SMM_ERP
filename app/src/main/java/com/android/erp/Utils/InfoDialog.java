@@ -7,18 +7,22 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.support.v7.widget.AppCompatEditText;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.erp.FirstHomeActivity;
 import com.android.erp.Network.ApiService;
+import com.android.erp.Network.Response.Paket;
 import com.android.erp.Network.Response.ResultResponse;
 import com.android.erp.Network.RetrofitClient;
 import com.android.erp.R;
+
+import java.util.ArrayList;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -30,9 +34,12 @@ public class InfoDialog extends AppCompatDialogFragment {
     private AppCompatEditText companyNameEditText,passwordEditText,adminNameEditText,phoneEditText,mailEditText,addressEditText,siteEditText;
     private TextInputLayout passLayout;
     private ProgressBar progressBar;
-    private String displayName="",adminName="",phone="",mail="",address="",site="",userId="",password="",adminId="";
+    private String displayName="",adminName="",phone="",mail="",address="",site="",userId="",password="",adminId="", paketId ="";
     private boolean createUser;
     private Button changeBtn;
+    private ArrayList<Paket>pakets;
+    private ArrayList<String>paketNames;
+    private Spinner paketSpinner;
 
 
     private Disposable disposable;
@@ -56,6 +63,10 @@ public class InfoDialog extends AppCompatDialogFragment {
              userId=userData.getString("userId");
              password=userData.getString("password");
              adminId=userData.getString("adminId");
+             paketId=userData.getString("paketId");
+             pakets=userData.getParcelableArrayList("paketList");
+
+
 
         }
         initData(view);
@@ -73,9 +84,9 @@ public class InfoDialog extends AppCompatDialogFragment {
 
             progressBar.setVisibility(View.VISIBLE);
             changeBtn.setVisibility(View.INVISIBLE);
+            paketId= String.valueOf(paketSpinner.getSelectedItemPosition()+1);
 
-
-            saveToDatabase(userId,password,adminId,displayName,phone,mail,address,site);
+            saveToDatabase(userId,password,adminId,displayName,paketId,phone,mail,address,site);
 
 
         });
@@ -97,14 +108,14 @@ public class InfoDialog extends AppCompatDialogFragment {
 
     }
 
-    private void saveToDatabase(String userId,String password,String adminId, String displayName, String phone, String mail, String address, String site) {
+    private void saveToDatabase(String userId,String password,String adminId, String displayName,String paketId, String phone, String mail, String address, String site) {
 
         //TODO Url=http://mealappeazi.alwaysdata.net/erpapp/adduser.php
         // parametrs: userId,password,adminId,displayname,telephone,username,address,site
         ApiService service = new RetrofitClient().create();
         Observable<ResultResponse> result = null;
 
-        result = service.addUser(userId,password,adminId,displayName,phone,mail,address,site);
+        result = service.addUser(userId,password,adminId,displayName,paketId,phone,mail,address,site);
         disposable = result
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -145,7 +156,17 @@ public class InfoDialog extends AppCompatDialogFragment {
         siteEditText=view.findViewById(R.id.edtMailInfoSite);
         passwordEditText=view.findViewById(R.id.edtPasswordInfo);
         passLayout=view.findViewById(R.id.text_layout_info_password);
+        paketSpinner=view.findViewById(R.id.spinnerPaketsInfo);
+        paketNames=new ArrayList<>();
+        getPaketNames();
 
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item,
+                paketNames);
+        paketSpinner.setAdapter(adapter);
+        if (paketId==null)
+            paketSpinner.setSelection(0);
+        else
+        paketSpinner.setSelection(Integer.parseInt(paketId)-1);
 
         companyNameEditText.setText(displayName);
         adminNameEditText.setText(adminName);
@@ -165,6 +186,15 @@ public class InfoDialog extends AppCompatDialogFragment {
 
 
 
+    }
+
+    private void getPaketNames() {
+        for (Paket paket: pakets){
+
+            String name=paket.getName();
+            String paketName=name.substring(0, 1).toUpperCase() + name.substring(1);
+            paketNames.add(paketName);
+        }
     }
 
 

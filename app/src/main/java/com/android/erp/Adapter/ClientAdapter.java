@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.android.erp.HomeActivity;
 import com.android.erp.Network.ApiService;
+import com.android.erp.Network.Response.Paket;
 import com.android.erp.Network.Response.Users;
 import com.android.erp.Network.Response.ResultResponse;
 import com.android.erp.Network.RetrofitClient;
@@ -24,6 +26,8 @@ import com.android.erp.R;
 import com.android.erp.Utils.GeneralUtils;
 import com.android.erp.Utils.InfoDialog;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -35,12 +39,14 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientHold
 
     private Context context;
     private List<Users> list;
+    private List<Paket>paketList;
     private Disposable disposable;
     private String displayName="",adminName="",phone="",mail="",address="",site="",userId="";
 
-    public ClientAdapter(Context context, List<Users> list) {
+    public ClientAdapter(Context context, List<Users> list, List<Paket>paketList) {
         this.context = context;
         this.list = list;
+        this.paketList=paketList;
         notifyDataSetChanged();
     }
 
@@ -119,6 +125,9 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientHold
                 args.putString("userId",list.get(i).getUserId());
                 args.putString("password",list.get(i).getPassword());
                 args.putString("adminId",userId);
+                args.putString("paketId",list.get(i).getPaketId());
+                ArrayList<Paket>pakets=new ArrayList<>(paketList);
+                args.putParcelableArrayList("paketList",pakets);
 
 
 
@@ -155,14 +164,14 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientHold
             info = itemView.findViewById(R.id.infoB);
         }
     }
-    private void saveToDatabase(String userId,String password,String adminId, String displayName, String phone, String mail, String address, String site) {
+    private void saveToDatabase(String userId,String password,String adminId, String displayName,String paketId, String phone, String mail, String address, String site) {
 
         //TODO Url=http://mealappeazi.alwaysdata.net/erpapp/adduser.php
         // parametrs: userId,displayname,telephone,username,address,site
         ApiService service = new RetrofitClient().create();
         Observable<ResultResponse> result = null;
 
-        result = service.addUser(userId,password,adminId,displayName,phone,mail,address,site);
+        result = service.addUser(userId,password,adminId,displayName,paketId,phone,mail,address,site);
         disposable = result
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

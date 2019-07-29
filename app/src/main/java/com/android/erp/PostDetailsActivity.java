@@ -33,8 +33,10 @@ import com.android.erp.Utils.DatePickerFragment;
 import com.android.erp.Utils.GeneralUtils;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -74,7 +76,11 @@ public class PostDetailsActivity extends AppCompatActivity implements DatePicker
         movzu = getIntent().getStringExtra("title");
         text = getIntent().getStringExtra("text");
         price = getIntent().getStringExtra("price");
-        initData();
+        try {
+            initData();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         setClicks();
         SharedPreferences editor = getSharedPreferences("USER", MODE_PRIVATE);
         boolean isAdmin=editor.getBoolean("isAdmin",false);
@@ -111,7 +117,7 @@ public class PostDetailsActivity extends AppCompatActivity implements DatePicker
     }
 
 
-    private void initData() {
+    private void initData() throws ParseException {
         Typeface avenir_light = Typeface.createFromAsset(getAssets(),"fonts/AvenirLight.ttf");
         mainContainer=findViewById(R.id.mainContainerPostDetails);
         doneConfirm = findViewById(R.id.done_confirm);
@@ -144,11 +150,11 @@ public class PostDetailsActivity extends AppCompatActivity implements DatePicker
             isDoneDetails.setTextColor(getResources().getColor(R.color.falseColor));
             undoneBox.setChecked(true);
         }
-        date_editText.setText(date);
+        date_editText.setText(dateFormatChange(date));
         movzu_editText.setText(movzu);
         metn_editText.setText(text);
         reklam_editText.setText(price);
-        all_name_details.setText(date);
+        all_name_details.setText(dateFormatChange(date));
         all_name_details.setTypeface(avenir_light);
         focus();
     }
@@ -268,14 +274,18 @@ public class PostDetailsActivity extends AppCompatActivity implements DatePicker
                     loa.setVisibility(View.VISIBLE);
                     buttonLegv.setVisibility(View.INVISIBLE);
                     buttonTesdiq.setVisibility(View.INVISIBLE);
-                    fetchData();
+                    try {
+                        fetchData();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 });
 
                 myDialog.show();
             }
         });
     }
-    private void fetchData() {
+    private void fetchData() throws ParseException {
         ApiService service = new RetrofitClient().create();
         Observable<ResultResponse> result = null;
         String checking = "0";
@@ -291,7 +301,7 @@ public class PostDetailsActivity extends AppCompatActivity implements DatePicker
         }
 
         result = service.add(userId,categoryId,movzu_editText.getText().toString(),metn_editText.getText().toString(),reklam_editText.getText().toString(),
-                date_editText.getText().toString(),checking);
+                dataFormatChangeForDatabase(date_editText.getText().toString()),checking);
         disposable = result
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -305,6 +315,8 @@ public class PostDetailsActivity extends AppCompatActivity implements DatePicker
                         Throwable::getMessage);
 
     }
+
+
 
     private void goToActivity(ResultResponse event) {
         if (event.getResult().equals("fail")){
@@ -338,7 +350,11 @@ public class PostDetailsActivity extends AppCompatActivity implements DatePicker
         calendar.set(Calendar.DAY_OF_MONTH,day);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String date = sdf.format(calendar.getTime());
-        date_editText.setText(date);
+        try {
+            date_editText.setText(dateFormatChange(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     public void hideSoftKeyboard() {
@@ -364,6 +380,31 @@ public class PostDetailsActivity extends AppCompatActivity implements DatePicker
         metn_editText.setFocusableInTouchMode(true);
         reklam_editText.setFocusable(true);
         reklam_editText.setFocusableInTouchMode(true);
+    }
+
+    public String dateFormatChange(String inputDate) throws ParseException {
+        String outputDate=" ";
+        if (inputDate!=null) {
+            DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+            DateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
+            Date date = inputFormat.parse(inputDate);
+            outputDate = outputFormat.format(date);
+        }
+
+        return outputDate;
+    }
+
+    private String dataFormatChangeForDatabase(String inputDate) throws ParseException {
+        String outputDate=" ";
+        if (inputDate!=null) {
+            DateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
+            DateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = inputFormat.parse(inputDate);
+            outputDate = outputFormat.format(date);
+        }
+
+        return outputDate;
+
     }
 
 

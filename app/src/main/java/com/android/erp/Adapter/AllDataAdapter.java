@@ -15,6 +15,10 @@ import com.android.erp.Network.Response.CategoriesResponse;
 import com.android.erp.PostDetailsActivity;
 import com.android.erp.R;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class AllDataAdapter extends RecyclerView.Adapter<AllDataAdapter.AllDataViewHolder> {
@@ -38,10 +42,16 @@ public class AllDataAdapter extends RecyclerView.Adapter<AllDataAdapter.AllDataV
         return new AllDataViewHolder(view);
     }
 
+
+
     @Override
     public void onBindViewHolder(@NonNull AllDataViewHolder allDataViewHolder, int i) {
         Typeface avenir_light = Typeface.createFromAsset(context.getAssets(),"fonts/AvenirLight.ttf");
-        allDataViewHolder.date.setText(list.get(i).getDate());
+        try {
+            allDataViewHolder.date.setText(dateFormatChange(list.get(i).getDate()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         allDataViewHolder.date.setTypeface(avenir_light);
         allDataViewHolder.done.setTypeface(avenir_light);
         if (list.get(i).getChecking().equals("0")){
@@ -77,6 +87,18 @@ public class AllDataAdapter extends RecyclerView.Adapter<AllDataAdapter.AllDataV
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    public String dateFormatChange(String inputDate) throws ParseException {
+        String outputDate=" ";
+        if (inputDate!=null) {
+            DateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+            DateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
+            Date date = inputFormat.parse(inputDate);
+            outputDate = outputFormat.format(date);
+        }
+
+        return outputDate;
     }
 
     public class AllDataViewHolder extends RecyclerView.ViewHolder{

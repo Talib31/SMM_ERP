@@ -139,6 +139,8 @@
 
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/date_editText"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:layout_marginStart="24dp"
                     android:layout_marginEnd="24dp"
                     android:textColorHint="@color/textColor"
@@ -146,7 +148,8 @@
                     android:layout_marginBottom="16dp"
                     android:hint="@string/tarix"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    />
 
 
             </android.support.design.widget.TextInputLayout>
@@ -160,6 +163,8 @@
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/movzu_editText"
                     android:layout_marginStart="24dp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:layout_marginEnd="24dp"
                     android:textColorHint="@color/textColor"
                     android:textColor="@color/textColor"
@@ -181,6 +186,8 @@
                     android:id="@+id/metn_editText"
                     android:layout_marginStart="24dp"
                     android:layout_marginEnd="24dp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:textColorHint="@color/textColor"
                     android:textColor="@color/textColor"
                     android:layout_marginBottom="16dp"
@@ -200,6 +207,8 @@
                 <android.support.v7.widget.AppCompatEditText
                     android:id="@+id/reklam_editText"
                     android:layout_marginStart="24dp"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:layout_marginEnd="24dp"
                     android:textColorHint="@color/textColor"
                     android:textColor="@color/textColor"

@@ -1,10 +1,12 @@
 package com.android.erp;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatEditText;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -26,14 +29,19 @@ import com.android.erp.Network.ApiService;
 import com.android.erp.Network.Response.LoginResponse;
 import com.android.erp.Network.Response.ResultResponse;
 import com.android.erp.Network.RetrofitClient;
+import com.android.erp.Utils.DatePickerFragment;
 import com.android.erp.Utils.GeneralUtils;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class PostDetailsActivity extends AppCompatActivity {
+public class PostDetailsActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     private RelativeLayout mainContainer;
     private AppBarLayout appBarLayout;
     private Toolbar toolbar;
@@ -71,6 +79,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         SharedPreferences editor = getSharedPreferences("USER", MODE_PRIVATE);
         boolean isAdmin=editor.getBoolean("isAdmin",false);
         setEditable(isAdmin);//If it is admin account can change texts of EditTextx,otherwise disable them
+        //hideSoftKeyboard();
     }
 
     private void setEditable(boolean isAdmin) {
@@ -141,8 +150,18 @@ public class PostDetailsActivity extends AppCompatActivity {
         reklam_editText.setText(price);
         all_name_details.setText(date);
         all_name_details.setTypeface(avenir_light);
+        focus();
     }
     private void setClicks(){
+        date_editText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                focus();
+                DialogFragment dialogFragment = new DatePickerFragment();
+                dialogFragment.show(getSupportFragmentManager(),"datepicker");
+
+            }
+        });
         p = new PopupMenu(PostDetailsActivity.this,lang);
         p.getMenuInflater().inflate(R.menu.main_menu,p.getMenu());
 
@@ -310,4 +329,42 @@ public class PostDetailsActivity extends AppCompatActivity {
         if (disposable != null)
             disposable.dispose();
     }
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR,year);
+        calendar.set(Calendar.MONTH,month);
+        calendar.set(Calendar.DAY_OF_MONTH,day);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String date = sdf.format(calendar.getTime());
+        date_editText.setText(date);
+    }
+
+    public void hideSoftKeyboard() {
+        if(getCurrentFocus()!=null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+    }
+
+    /**
+     * Shows the soft keyboard
+     */
+    public void showSoftKeyboard(View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        view.requestFocus();
+        inputMethodManager.showSoftInput(view, 0);
+    }
+
+    private void focus(){
+        movzu_editText.setFocusable(true);
+        movzu_editText.setFocusableInTouchMode(true);
+        metn_editText.setFocusable(true);
+        metn_editText.setFocusableInTouchMode(true);
+        reklam_editText.setFocusable(true);
+        reklam_editText.setFocusableInTouchMode(true);
+    }
+
+
 }

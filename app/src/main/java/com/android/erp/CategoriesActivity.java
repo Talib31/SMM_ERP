@@ -70,7 +70,7 @@ public class CategoriesActivity extends AppCompatActivity {
 
     private Disposable disposable;
 
-    private int currentItem;
+    private static int currentItem;
 
     private boolean checkAz,checkEn,checkRu,isAdmin;
 
@@ -85,6 +85,7 @@ public class CategoriesActivity extends AppCompatActivity {
         checkAz = intent.getBooleanExtra("checkAz",false);
         checkEn = intent.getBooleanExtra("checkEn",false);
         checkRu = intent.getBooleanExtra("checkRu",false);
+        currentItem=Integer.parseInt(categoryId);
         now = Calendar.getInstance();
         day = String.valueOf(now.get(Calendar.DATE));
 
@@ -145,7 +146,7 @@ public class CategoriesActivity extends AppCompatActivity {
 //        pagerModels.add(new PagerModel("Facebook","https://images.vexels.com/media/users/3/137253/isolated/preview/90dd9f12fdd1eefb8c8976903944c026-facebook-icon-logo-by-vexels.png"));
 //        pagerModels.add(new PagerModel("Linkedin","https://images.vexels.com/media/users/3/137382/isolated/preview/c59b2807ea44f0d70f41ca73c61d281d-linkedin-icon-logo-by-vexels.png"));
         //fetchData(String.valueOf(categoryId),month,year);
-         currentItem=Integer.parseInt(categoryId);
+
         if (currentItem<5){
 
             currentItem-=1;
@@ -535,7 +536,11 @@ public class CategoriesActivity extends AppCompatActivity {
         super.onRestart();
         categoriesProgress.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.INVISIBLE);
+        if (currentItem ==0){
+            currentItem = 1;
+        }
         fetchData(String.valueOf(currentItem),month,year);
+        Log.d("dasdas",String.valueOf(currentItem));
     }
 
     private void initRecycler(List<CategoriesResponse> response){
